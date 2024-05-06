@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { PathProps } from '../../../../../types';
 import { Breadcrumb } from '../../../breadcrumb';
 import { Search } from '../../../input/Search';
+import TypesDropdown from '../Filter/types';
 
 
 
@@ -43,7 +44,7 @@ export default function PathBar(props: PathProps) {
 
                 )}
                 
-
+                <TypesDropdown/>
               {props.search && (
                 <div className="no-dragable">
                   <Search

@@ -107,7 +107,8 @@ export type VolumeSearch = {
     map?:number[],
     private:boolean,
     roots:string[],
-    datacenterId:string[]
+    datacenterId:string[],
+    parentId:string[]
 }
 export type PartnerType = {
     type: 'sponsor' | 'media_partener',
@@ -185,7 +186,7 @@ export type TopbarTitleProps = {
 
 }
 export type routeType = {
-  path?:string,
+    action?:() => void,
   name?:string,
   icon?:iconType
 }

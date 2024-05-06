@@ -3,7 +3,8 @@ import ResourcesTopBar from "./ResourcesPanel"
 
 type Props = {
 
-    isPublication?:boolean
+    isPublication?:boolean,
+    noDetails?:boolean
 
 }
 export const PanelBar = (props:Props) => {
@@ -13,10 +14,13 @@ export const PanelBar = (props:Props) => {
                 <ResourcesTopBar isPublication={props.isPublication}/>
             
             </div>
-            <div className='w-[33%] flex flex-col'>
-                <DetailsTopBar/>
-            
-            </div>
+            {!props.noDetails && (
+                <div className='w-[33%] flex flex-col'>
+                    <DetailsTopBar/>
+                
+                </div>
+
+            )}
          </div>
     )
 }

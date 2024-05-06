@@ -17,7 +17,7 @@ export const Breadcrumb = (props:Props) => {
                         <ButtonLg
                             key={i}
                             buttonProps={{
-                                onClick:() => route.path ? navigate(route.path) : {},
+                                onClick:() => route.action ? route.action() : {},
                             }}
                             prefix={route.icon && {
                                 icon: route.icon,

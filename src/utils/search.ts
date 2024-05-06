@@ -17,14 +17,18 @@ const TYPESENSE_CONFIG :any= {
 export const search = new Typesense.Client(TYPESENSE_CONFIG)
 
 
-export function searchVolumes({parentId}: {parentId:string}){
+export function searchVolumes({parentId, q,page, offset, limit, filter}: {parentId:string, q:string, page?: number, offset?:number, limit?:number,filter:string }){
   return search.collections('locations').documents().search({
-    'q': '*',
-    'query_by'  : '',
-    'sort_by':'title.en:asc',
-    'filter_by': `status:enabled && roots:${parentId}`,
+    'q': q,
+    'sort_by':'depth:asc',
+    'filter_by': `status:enabled && roots:${parentId} && ${filter}`,
     'prioritize_token_position':true,
-    'exclude_fields':'pinned_sources'
+    'exclude_fields':'pinned_sources',
+    'query_by'  : 'title.en, breadcrumbs.en, breadcrumbs.fr, description.en, description.fr, title.fr',
+    limit: (limit && limit > 0) ? limit :15,
+    page : page? page:1,
+    offset: offset?offset:0,
+
 
  
   })
@@ -33,7 +37,7 @@ export function searchVolumes({parentId}: {parentId:string}){
 export function searchPublications({q, volumeId, page, offset, type, groupBy, limit, sponsored}: {q:string, volumeId:string, page?: number, offset?:number, type?:{type: 'groupe' | 'type', value:string}, groupBy?:string, limit?:number, sponsored?:boolean}){
   return search.collections('publications_link').documents().search({
     'q': q,
-    'query_by'  : 'title.en, title.fr,description.en, description.fr, keywords.en, keywords.fr',
+    'query_by'  : 'title.en, title.fr,description.en, description.fr, keywords.en, keywords.fr, organization.name',
     'filter_by': `status:published && roots:=${volumeId} ${(type?.value && type.type === 'type') ? `&& publicationType.id:${type.value}` : ''} ${(type?.value && type.type === 'groupe') ? `&& publicationGroupe.id:${type.value}` : ''} ${sponsored ? '&& sponsored:true' : ''}`,
     'group_by' : groupBy?groupBy:'',
     limit: (limit && limit > 0) ? limit :15,
@@ -50,18 +54,18 @@ export function searchPublications({q, volumeId, page, offset, type, groupBy, li
 
 }
 
-export const searchVolumeResource = ({id,query}: {id:string, query:string}) =>{
+export const searchVolumeResource = ({id,query, filter}: {id:string, query:string, filter:string}) =>{
   let searchRequests:any = {
     'searches': [
       {
         'collection': 'publications_link',
         'filter_by': `status:published`,
-        'query_by'  : 'title.en, title.fr, description.en, description.fr, keywords.en, keywords.fr',
+        'query_by'  : 'title.en, title.fr, description.en, description.fr, keywords.en, keywords.fr, organization.name',
 
       },
       {
         'collection': 'locations',
-        'filter_by': `status:enabled && cfs_type:!=localServers`,
+        'filter_by': `status:enabled && ${filter}`,
         'exclude_fields':'pinned_sources',
         'sort_by':'depth:asc',
         'query_by'  : 'title.en, breadcrumbs.en, breadcrumbs.fr, description.en, description.fr, title.fr',
@@ -75,7 +79,6 @@ export const searchVolumeResource = ({id,query}: {id:string, query:string}) =>{
     "q": query,
  
     "limit":7,
-    'query_by'  : 'title.en, title.fr',
 
 
 
@@ -123,4 +126,16 @@ export const getPublication = ({id}:{id:string}) => {
 }
 export const getVolume = ({id}:{id:string}) => {
   return search.collections('locations').documents(id).retrieve()
+}
+
+export const getPopularCommunities = () => {
+  return search.collections('datacenters').documents().search({
+    'q': '*',
+    'query_by'  : 'title.en',
+    'sort_by':'title.en:asc',
+    'filter_by': `status:!=disabled && popular:true`,
+    'limit': 50,
+    'exclude_fields':'pinned_sources'
+ 
+  })
 }

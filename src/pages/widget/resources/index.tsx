@@ -9,13 +9,17 @@ import ReactSvg from '../../../components/shared/ReactSvg';
 import { storageUrl } from '../../../constants/apiRequests';
 import { ButtonLg } from '../../../components/shared/Buttons/ButtonLg';
 import Publications from '../../../components/shared/publications';
+import { useAppContext } from '../../../context/appContext';
+import { renderHeightStyle } from '../../../utils/utils';
+import useNavigateTo from '../useNavigateTo';
 
 export default function ResourcesLayout() {
     const params = useParams()
-    const navigate = useNavigate()
     const [publications, setpublications] = useState<{document:Publication, highlight:Highlight}[]>([]);
     const [volumes, setvolumes] = useState<{document:VolumeSearch}[]>([])
-
+    const { query , containerRef} = useAppContext()
+    const [totalHits, settotalHits] = useState({volumes: 0, publications:0});
+    const { goTo } = useNavigateTo()
     useEffect(() => {
        (async () =>  {
         let id
@@ -27,90 +31,90 @@ export default function ResourcesLayout() {
             id = params.volume 
         }
         if(!id) return
-        const res:any = await searchVolumeResource({id, query:''})
-        console.log(res)
+        const res:any = await searchVolumeResource({id, query, filter: `${params.volume ? 'cfs_type:!=specDrives' : 'cfs_type:!=localServers'}`})
         setpublications(res.results[0]?.hits)
         setvolumes(res.results[1]?.hits)
+        settotalHits({volumes: res.results[1]?.found, publications:res.results[0]?.found})
 
        })()
-    }, []);
+    }, [query]);
   return (
-    <div className="flex">
+    <>
 
-    <div className="pt-[14px] overflow-auto height-explorer flex-1">
-    <Collapse defaultActiveKey={['shortcuts', 'publications', 'volumes']}>
-        <>
-        
-            <Panel key={'volumes'} header={<p className='text-groupe'>Recently pinned volumes</p>}>
-                <div className='pl-[14px] '>
-                    <div className="flex flex-wrap gap-x-9">
-                        {volumes && volumes.length>0 ? (
-                            <>
-                            {volumes.map(volume => (
-                                    <ObjectWithDropdown
-                                    title={volume.document.title.en}
-                                    overlay={<ResourceMenu
-                                        items={{shortcut:true}}
-                               
-                                    />}
-                                    icon={<div className='relative w-full h-full '>
-                                        <ReactSvg src={`${storageUrl}${volume.document.iconUrl}`} className='w-full h-full'
-                 
-                                        />
-                                    
-                                        
-                                    </div>}
-                                    key={volume.document.id}
-                                    id={volume.document.id!}
-                                    description={<p className='truncate'>{volume.document.breadcrumbs?.[0]?.en!}</p>
-                                        
-                                    
-                                        
-                                    }
-                                    active={volume.document.id === params.volumeId}
-                                    onSelect={() => {}}
-                                />
-                                ))}
-                        
-                            </>
-                        ) : <p className='pl-2.5'>No volumes yet</p>}
-                    </div>
-                    {volumes && volumes?.length > 6 &&
-                        <ButtonLg       
-                            buttonProps={{
-                                onClick: () => {}
-                            }}
-                        ><p>See all</p></ButtonLg>
+    <div className="pt-[14px] overflow-auto flex-1" style={renderHeightStyle(containerRef?.current?.clientHeight)}>
+        <Collapse defaultActiveKey={['publications', 'volumes']}>
+            <>
+            
+                <Panel key={'volumes'} header={<p className='text-groupe'>Recently added volumes</p>}>
+                    <div className='pl-[14px] '>
+                        <div className="flex flex-wrap gap-x-9">
+                            {volumes && volumes.length>0 ? (
+                                <>
+                                {volumes.map(volume => (
+                                        <ObjectWithDropdown
+                                        title={volume.document.title.en}
+                                        overlay={<ResourceMenu
+                                            items={{shortcut:true}}
+                                
+                                        />}
+                                        icon={<div className='relative w-full h-full '>
+                                            <ReactSvg src={`${storageUrl}${volume.document.iconUrl}`} className='w-full h-full'
                     
-                    }
-                
-                </div>
-            </Panel>
-            <Panel key={'publications'} header={<p className='text-groupe'>Recent publications</p>}>
-                <div className="pl-[19px]">
-                    {publications && publications.length>0 ? <>
-                        <Publications setRecheckPin={() => {}} publications={publications} handlePublicationSelection={() => {}} /> 
-                        {publications.length > 6 && (
-                            <ButtonLg
+                                            />
+                                        
+                                            
+                                        </div>}
+                                        key={volume.document.id}
+                                        id={volume.document.id!}
+                                        description={<p className='truncate'>{volume.document.breadcrumbs?.[0]?.en!}</p>
+                                            
+                                        
+                                            
+                                        }
+                                        active={volume.document.id === params.volumeId}
+                                        onSelect={() => goTo(`/volumes/${volume.document.id}`, {state: volume.document})}
+                                    />
+                                    ))}
                             
+                                </>
+                            ) : <p className='pl-2.5'>No volumes yet</p>}
+                        </div>
+                        {volumes && totalHits.volumes > 7 &&
+                            <ButtonLg       
                                 buttonProps={{
-                                    onClick: () => {}
+                                    onClick: () => goTo('/all/volumes', {})
                                 }}
-                            ><p>See all</p></ButtonLg>
-
-                        )}
-                    </> : <p className='pl-2.5'>No pinned publication yet</p>}
+                            ><p>See all ({totalHits.volumes})</p></ButtonLg>
+                        
+                        }
                     
-                </div>
-            </Panel>
-           
-        </>
-    </Collapse>
+                    </div>
+                </Panel>
+                <Panel key={'publications'} header={<p className='text-groupe'>Recent added publications</p>}>
+                    <div className="pl-[19px]">
+                        {publications && totalHits.publications>0 ? <>
+                            <Publications setRecheckPin={() => {}} publications={publications} handlePublicationSelection={(publication) => goTo(`/publications/${publication.id}`, {state: {item:publication, url: publication.website}})} /> 
+                            {publications.length > 6 && (
+                                <ButtonLg
+                                
+                                    buttonProps={{
+                                        onClick: () => goTo('/all/publications', {})
+                                    }}
+                                ><p>See all ({totalHits.publications})</p></ButtonLg>
 
-</div>
-<div className='w-[33%]'>
-    <Outlet/>
-</div>
+                            )}
+                        </> : <p className='pl-2.5'>No publication yet</p>}
+                        
+                    </div>
+                </Panel>
+            
+            </>
+        </Collapse>
+
     </div>
+    <div className='w-[33%]'>
+        <Outlet/>
+    </div>
+    </>
   )
 }

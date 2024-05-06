@@ -26,7 +26,7 @@ export default function Layout() {
                 <div className='flex rounded border border-main'>
                     <Locations handleSelectLocation={handleSelectLocation} selectedLocation={selectedLocation?.name}/>
                     <input type="text" className='min-w-[300px] max-w-[400px] w-full border-none pl-2' placeholder='website' value={value} onChange={e => setvalue(e.target.value)} />
-                    <button className='bg-skin-fill-inverted text-skin-inverted rounded-r px-4' onClick={() => {
+                    <button className='bg-skin-fill-inverted text-skin-inverted rounded-r px-4 disabled:opacity-20' disabled={!selectedLocation} onClick={() => {
                         setifram(value)
                     }}>Ok</button>
                 </div>

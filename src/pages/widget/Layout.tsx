@@ -19,6 +19,7 @@ export default function WidgetLayout() {
     const { setDatacenter,containerRef,  server, setServer, setVolume, datacenter, breadcrum,setWindowHeight, setdisable, disabled, query, setQuery, pagination, setPaginate, totalHits, setresourcesWidth, currentTab, volume, clearSearch} = useAppContext()
     const [loading, setloading] = useState(false);
     const location = useLocation()
+    const [all, setall] = useState(false);
 
     useEffect(() => {
         setvisible(true)
@@ -74,7 +75,6 @@ export default function WidgetLayout() {
       useEffect(() => {
         if(location.pathname.includes('all/publications')){
           setdisable({publicationBar:false, query:false, filter:false})
-        
 
         }else{
           if(currentTab === 'network' && params.volume){
@@ -86,13 +86,19 @@ export default function WidgetLayout() {
           }
 
         }
+
+        if(location.pathname.includes('all')){
+          setall(true)
+        }else{
+          setall(false)
+        }
         
       }, [location.pathname, currentTab, params]);
 
       useEffect(() => {
         
         clearSearch()
-      }, [currentTab, disabled.query, disabled.filter]);
+      }, [currentTab, all]);
 
 
     

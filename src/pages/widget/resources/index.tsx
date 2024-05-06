@@ -30,14 +30,15 @@ export default function ResourcesLayout() {
         if(params.volume){
             id = params.volume 
         }
+        console.log(query, params, id)
         if(!id) return
-        const res:any = await searchVolumeResource({id, query, filter: `${params.volume ? 'cfs_type:!=specDrives' : 'cfs_type:!=localServers'}`})
+        const res:any = await searchVolumeResource({id, query: query, filter: `${params.volume ? 'cfs_type:!=specDrives' : 'cfs_type:!=localServers'}`})
         setpublications(res.results[0]?.hits)
         setvolumes(res.results[1]?.hits)
         settotalHits({volumes: res.results[1]?.found, publications:res.results[0]?.found})
 
        })()
-    }, [query]);
+    }, [query, params.serverId, params.volume]);
   return (
     <>
 

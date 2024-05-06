@@ -3,9 +3,8 @@ import { useAppContext } from '../../../context/appContext'
 
 
 export default function Header() {
-    const location = useLocation()
     const navigate = useNavigate()
-    const { datacenter , server, currentTab, volume } = useAppContext()
+    const { server, currentTab } = useAppContext()
     const params = useParams()
     const handleNavigation = (page: string) => {
       // navigate(`/widget${page}`, {state: location.state})
@@ -17,9 +16,9 @@ export default function Header() {
     return (
       <div className="border-b border-main bg-white">
         <div className='bar-h flex items-center space-x-9 pl-[43px]'>
-            <button className={`${isActive('main') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/main`)}>{volume ? volume.title : datacenter?.title} - {server?.title}</button>
-            <button className={`${isActive('network') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/network`)}>{volume ? volume.title : datacenter?.title} - World</button>
-            <button className={`${isActive('grid') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation('/grid')}>Teddra Grid</button>
+            <button className={`${isActive('main') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/main`)}>{server?.title}</button>
+            <button className={`${isActive('network') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/network`)}>All engines</button>
+            <button className={`${isActive('grid') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation('/grid')}>Search Grid</button>
 
 
 

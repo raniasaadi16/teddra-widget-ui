@@ -17,83 +17,94 @@ import GridContainerLayout from './pages/widget/grid/Layout';
 import GridLayout from './pages/widget/grid';
 import NetworkResourcesForVolumes from './pages/widget/networkResources/ForVolumes';
 import NetworkResourcesForServers from './pages/widget/networkResources/ForServers';
+import PrivateRoute from './components/shared/PrivateRoute';
+import Login from './pages/connect';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route element={<AppContextProvider><Layout/></AppContextProvider>}>
-      <Route path='/' element={<></>}/>
+    <>
+    <Route element={<PrivateRoute/>}>
+      <Route element={<AppContextProvider><Layout/></AppContextProvider>}>
+        <Route path='/' element={<></>}/>
 
-      <Route element={<WidgetLayout/>}>
-        <Route path='/widget' element={<></>}/>
+        <Route element={<WidgetLayout/>}>
+          <Route path='/widget' element={<></>}/>
 
-        {/**    GRID RESOURCES (SECOND TAB) */}
-        <Route element={<GridContainerLayout/>}>
-          <Route element={<GridLayout/>}>
-            <Route path='/widget/grid/:datacenterId/:serverId' element={<></>}/>
-            <Route path='/widget/grid/:datacenterId/:serverId/:type/:volume' element={<></>}/>
-              
+          {/**    GRID RESOURCES (SECOND TAB) */}
+          <Route element={<GridContainerLayout/>}>
+            <Route element={<GridLayout/>}>
+              <Route path='/widget/grid/:datacenterId/:serverId' element={<></>}/>
+              <Route path='/widget/grid/:datacenterId/:serverId/:type/:volume' element={<></>}/>
+                
+            </Route>
+
+          </Route>
+
+
+          {/**    NETWORK RESOURCES (SECOND TAB) */}
+          <Route element={<NetworkContainerLayout/>}>
+            {/** ONLY SERVERS */}
+            <Route element={<NetworkResourcesForServers/>}>
+              <Route path='/widget/network/:datacenterId/:serverId' element={<></>}/>
+              {/**VOLUME DETAILS */}
+              <Route path='/widget/network/:datacenterId/:serverId/volumes/:volumeId' element={<VolumeDetails/>}/>
+            </Route>
+
+            {/** ONLY VOLUMES */}
+            <Route element={<NetworkResourcesForVolumes/>}>
+              <Route path='/widget/network/:datacenterId/:serverId/:type/:volume' element={<></>}/>
+              {/**VOLUME DETAILS */}
+              <Route path='/widget/network/:datacenterId/:serverId/:type/:volume/volumes/:volumeId' element={<VolumeDetails/>}/>
+            </Route>
+
+          </Route>
+
+
+          {/**    RESOURCES (FIRST TAB) */}
+          <Route element={<ResourcesContainerLayout/>}>
+            <Route element={<ResourcesLayout/>}>
+              <Route path='/widget/main/:datacenterId/:serverId' element={<></>}/>
+              <Route path='/widget/main/:datacenterId/:serverId/:type/:volume' element={<></>}/>
+              {/**PUBLICATIONS DETAILS IN THE FIRST PAGE */}
+              <Route path='/widget/main/:datacenterId/:serverId/publications/:publicationId' element={<PublicationDetails/>}/>
+              <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/publications/:publicationId' element={<PublicationDetails/>}/>
+              {/**VOLUME DETAILS IN THE FIRST PAGE */}
+              <Route path='/widget/main/:datacenterId/:serverId/volumes/:volumeId' element={<VolumeDetails/>}/>
+              <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/volumes/:volumeId' element={<VolumeDetails/>}/>
+            </Route>
+
+
+            <Route element={<AllPublicationsLayout/>}>
+              <Route path='/widget/main/:datacenterId/:serverId/all/publications' element={<></>}/>
+              <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/publications' element={<></>}/>
+              {/**PUBLICATIONS DETAILS IN THE ALL PUBLICATIONS PAGE */}
+              <Route path='/widget/main/:datacenterId/:serverId/all/publications/:publicationId' element={<PublicationDetails/>}/>
+              <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/publications/:publicationId' element={<PublicationDetails/>}/>
+            </Route>
+
+            <Route element={<AllVolumsLayout/>}>
+              <Route path='/widget/main/:datacenterId/:serverId/all/volumes' element={<></>}/>
+              <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes' element={<></>}/>
+              {/**VOLUME DETAILS IN THE ALL VOLUMES PAGE */}
+              <Route path='/widget/main/:datacenterId/:serverId/all/volumes/:volumeId' element={<VolumeDetails/>}/>
+              <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes/:volumeId' element={<VolumeDetails/>}/>
+
+            </Route>
+
           </Route>
 
         </Route>
-
-
-        {/**    NETWORK RESOURCES (SECOND TAB) */}
-        <Route element={<NetworkContainerLayout/>}>
-          {/** ONLY SERVERS */}
-          <Route element={<NetworkResourcesForServers/>}>
-            <Route path='/widget/network/:datacenterId/:serverId' element={<></>}/>
-             {/**VOLUME DETAILS */}
-             <Route path='/widget/network/:datacenterId/:serverId/volumes/:volumeId' element={<VolumeDetails/>}/>
-          </Route>
-
-          {/** ONLY VOLUMES */}
-          <Route element={<NetworkResourcesForVolumes/>}>
-            <Route path='/widget/network/:datacenterId/:serverId/:type/:volume' element={<></>}/>
-             {/**VOLUME DETAILS */}
-            <Route path='/widget/network/:datacenterId/:serverId/:type/:volume/volumes/:volumeId' element={<VolumeDetails/>}/>
-          </Route>
-
-        </Route>
-
-
-        {/**    RESOURCES (FIRST TAB) */}
-        <Route element={<ResourcesContainerLayout/>}>
-          <Route element={<ResourcesLayout/>}>
-            <Route path='/widget/main/:datacenterId/:serverId' element={<></>}/>
-            <Route path='/widget/main/:datacenterId/:serverId/:type/:volume' element={<></>}/>
-            {/**PUBLICATIONS DETAILS IN THE FIRST PAGE */}
-            <Route path='/widget/main/:datacenterId/:serverId/publications/:publicationId' element={<PublicationDetails/>}/>
-            <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/publications/:publicationId' element={<PublicationDetails/>}/>
-            {/**VOLUME DETAILS IN THE FIRST PAGE */}
-            <Route path='/widget/main/:datacenterId/:serverId/volumes/:volumeId' element={<VolumeDetails/>}/>
-            <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/volumes/:volumeId' element={<VolumeDetails/>}/>
-          </Route>
-
-
-          <Route element={<AllPublicationsLayout/>}>
-            <Route path='/widget/main/:datacenterId/:serverId/all/publications' element={<></>}/>
-            <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/publications' element={<></>}/>
-            {/**PUBLICATIONS DETAILS IN THE ALL PUBLICATIONS PAGE */}
-            <Route path='/widget/main/:datacenterId/:serverId/all/publications/:publicationId' element={<PublicationDetails/>}/>
-            <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/publications/:publicationId' element={<PublicationDetails/>}/>
-          </Route>
-
-          <Route element={<AllVolumsLayout/>}>
-            <Route path='/widget/main/:datacenterId/:serverId/all/volumes' element={<></>}/>
-            <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes' element={<></>}/>
-            {/**VOLUME DETAILS IN THE ALL VOLUMES PAGE */}
-            <Route path='/widget/main/:datacenterId/:serverId/all/volumes/:volumeId' element={<VolumeDetails/>}/>
-            <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes/:volumeId' element={<VolumeDetails/>}/>
-
-          </Route>
-
-        </Route>
-
       </Route>
+
     </Route>
+    <Route path='/login' element={<Login/>}/>
+    <Route path='/unauthorized' element={<p>Unauthorized</p>}/>
+
+    
+    </>
 
   )
 );

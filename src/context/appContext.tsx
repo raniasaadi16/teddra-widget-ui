@@ -38,8 +38,8 @@ type Functions = {
   setTotalHits: (value:number) => void,
   setQuery: (value:string) => void,
   containerRef:any,
-  setcurrentTab : (data: 'main' | 'network' | 'grid') => void
-
+  setcurrentTab : (data: 'main' | 'network' | 'grid') => void,
+  clearSearch:() => void
 }
 type Props = States & Functions
 const AppContext = createContext<Props>({} as Props);

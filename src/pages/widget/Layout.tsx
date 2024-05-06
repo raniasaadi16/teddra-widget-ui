@@ -16,7 +16,7 @@ export default function WidgetLayout() {
     const [visible, setvisible] = useState(false);
     const navigate = useNavigate()
     const params = useParams()
-    const { setDatacenter,containerRef,  server, setServer, setVolume, datacenter, breadcrum,setWindowHeight, setdisable, disabled, query, setQuery, pagination, setPaginate, totalHits, setresourcesWidth, currentTab, volume} = useAppContext()
+    const { setDatacenter,containerRef,  server, setServer, setVolume, datacenter, breadcrum,setWindowHeight, setdisable, disabled, query, setQuery, pagination, setPaginate, totalHits, setresourcesWidth, currentTab, volume, clearSearch} = useAppContext()
     const [loading, setloading] = useState(false);
     const location = useLocation()
 
@@ -89,11 +89,13 @@ export default function WidgetLayout() {
         
       }, [location.pathname, currentTab, params]);
 
-
       useEffect(() => {
         
-        setQuery('')
-      }, [currentTab]);
+        clearSearch()
+      }, [currentTab, disabled.query, disabled.filter]);
+
+
+    
   return (
     <Drawer
         footer={null}

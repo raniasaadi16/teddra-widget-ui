@@ -21,7 +21,7 @@ export default function TitleBar(props: TitleProps) {
                           <Icon name={props.topbarTitle.icon.src} className='w-full h-full' /> 
 
                         </div>      
-                        <p className={` truncate max-w-[120px] `}>{props.topbarTitle.title}</p>
+                        <p className={`  `}>{props.topbarTitle.title}</p>
                     </div>
                   
                   </div>

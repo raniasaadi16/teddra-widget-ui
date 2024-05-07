@@ -17,8 +17,8 @@ export default function Header() {
       <div className="border-b border-main bg-white">
         <div className='bar-h flex items-center space-x-9 pl-[43px]'>
             <button className={`${isActive('main') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/main`)}>{server?.title}</button>
-            <button className={`${isActive('network') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/network`)}>All engines</button>
-            <button className={`${isActive('grid') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation('/grid')}>Search Grid</button>
+            <button className={`${isActive('network') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/network`)}>Global network</button>
+            {/* <button className={`${isActive('grid') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation('/grid')}>Search Grid</button> */}
 
 
 

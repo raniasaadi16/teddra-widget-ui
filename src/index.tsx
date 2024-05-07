@@ -30,18 +30,17 @@ const router = createBrowserRouter(
       <Route element={<AppContextProvider><Layout/></AppContextProvider>}>
         <Route path='/' element={<></>}/>
 
-        <Route element={<WidgetLayout/>}>
-          <Route path='/widget' element={<></>}/>
-
           {/**    GRID RESOURCES (SECOND TAB) */}
           <Route element={<GridContainerLayout/>}>
             <Route element={<GridLayout/>}>
-              <Route path='/widget/grid/:datacenterId/:serverId' element={<></>}/>
-              <Route path='/widget/grid/:datacenterId/:serverId/:type/:volume' element={<></>}/>
+              <Route path='/widget/grid' element={<></>}/>
                 
             </Route>
 
           </Route>
+        <Route element={<WidgetLayout/>}>
+          <Route path='/widget' element={<></>}/>
+
 
 
           {/**    NETWORK RESOURCES (SECOND TAB) */}

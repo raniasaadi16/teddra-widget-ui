@@ -111,7 +111,7 @@ export default function WidgetLayout() {
         placement='left'
         style={{
             height: '70%',
-            top: '24%',
+            top: '20%',
             left:17
         }}
     >
@@ -120,7 +120,7 @@ export default function WidgetLayout() {
             <div className="flex flex-col h-full teddra-rounded rounded-t-none overflow-hidden bg-sub-windows rounded-b" ref={containerRef}>
                 <TopBar
                     title={{
-                        topbarTitle:{title:`Teddra ${volume ? volume.title : datacenter?.title}`, icon:{src:'Document', type:'icon'}},
+                        topbarTitle:{title:`Teddra - ${volume ? volume.title : datacenter?.title}`, icon:{src:'Document', type:'icon'}},
                         close: () => navigate('/')
                     }}
                     

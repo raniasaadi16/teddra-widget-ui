@@ -108,7 +108,7 @@ export type VolumeSearch = {
     private:boolean,
     roots:string[],
     datacenterId:string[],
-    parentId:string[]
+    parentId:string
 }
 export type PartnerType = {
     type: 'sponsor' | 'media_partener',

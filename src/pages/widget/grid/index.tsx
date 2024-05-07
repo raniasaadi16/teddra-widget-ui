@@ -25,7 +25,7 @@ export default function GridLayout() {
     }, [])
   return (
     <>
-        <div className="pt-[14px] overflow-auto flex-1" style={renderHeightStyle(containerRef?.current?.clientHeight)}>
+       
             <Spin spinning={loading}>
 
                 <Collapse className='h-full flex flex-col space-y-2 pb-5' defaultActiveKey={['popular', 'pinned']}>
@@ -61,7 +61,6 @@ export default function GridLayout() {
 
             </Spin>
 
-        </div>
    
     
     </>

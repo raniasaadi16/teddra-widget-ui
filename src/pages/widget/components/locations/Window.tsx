@@ -9,7 +9,7 @@ import { Datacenter } from '../../grid/components/datacenter'
 import { Breadcrumb } from '../../../../components/shared/breadcrumb'
 import Servers from './Servers'
 
-export default function LocationsWindow({visible, setvisible, handleSelectLocation}:{visible:boolean, setvisible:any, handleSelectLocation : (data: {name:string, path:string}) => void}) {
+export default function LocationsWindow({visible, setvisible, handleSelectLocation}:{visible:boolean, setvisible:any, handleSelectLocation : (data: {name:string, path:string, network:{coll:string , id:string}}) => void}) {
     const [thematics, setthematics] = useState<{document:ServerWithHomeDesq}[]>([]);
     const [selectedThematic, setselectedThematic] = useState<ServerWithHomeDesq | null>(null);
     const [routes, setroutes] = useState<routeType[]>([]);
@@ -56,12 +56,15 @@ export default function LocationsWindow({visible, setvisible, handleSelectLocati
 
     const handleSelectVolume = (volume:VolumeSearch) => {
         let path = ''
+        let network = {coll: '', id:''}
         if(volume.cfs_type === 'localServers'){
             path = `/${selectedThematic?.id}/${volume.id}`
+            network = {id: selectedThematic?.id!, coll: 'datacenters'}
         }else{
             path = `/${selectedThematic?.id}/${volume.parentId[0]}/${volume.cfs_type}/${volume.id}`
+            network = {id: volume.id, coll: 'specDrives'}
         }
-        handleSelectLocation({name:volume.title.en, path})
+        handleSelectLocation({name:volume.title.en, path, network })
         setvisible(false)
     }
   return (
@@ -70,11 +73,11 @@ export default function LocationsWindow({visible, setvisible, handleSelectLocati
     visible={visible}
     closable={false}
     destroyOnClose
-    width={'620px'}
+    width={'50%'}
     placement='right'
     style={{
-        height: '500px',
-        top: 'calc(100vh - 570px)',
+        height: 'calc(100vh - 60px)',
+        top: '0',
         right:17
     }}
 >
@@ -96,7 +99,7 @@ export default function LocationsWindow({visible, setvisible, handleSelectLocati
             </div>
             <div className="flex-1">
                 
-                <div className='flex flex-wrap pl-[22px] gap-5 pt-5 pb-7 overflow-auto h-[420px]'>
+                <div className='flex flex-wrap pl-[22px] gap-5 pt-5 pb-7 overflow-auto h-[calc(100vh - 40px)]'>
                     {selectedThematic ? (
                         <Servers handleSelect={handleSelectVolume} selectedThematic={selectedThematic.id}/>
                     ) : (

@@ -67,7 +67,7 @@ export default function VolumeDetails(){
                                 center:true
                             },
                             {
-                                name:'Breadcrumb',
+                                name:'Path',
                                 value:volume.breadcrumb,
                                 center:true
                             },

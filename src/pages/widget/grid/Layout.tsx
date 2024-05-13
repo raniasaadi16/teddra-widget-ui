@@ -25,11 +25,12 @@ export default function GridLayout() {
         footer={null}
         visible={visible}
         closable={false}
+   
         width={'60vw'}
         placement='left'
         style={{
-            height: '70%',
-            top: '20%',
+            height: '70vh',
+            top: 'calc(30vh - 110px)',
             left:17
         }}
     >

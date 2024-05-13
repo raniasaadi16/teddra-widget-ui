@@ -34,20 +34,18 @@ export function searchVolumes({parentId, q,page, offset, limit, filter}: {parent
   })
 }
 
-export function searchPublications({q, volumeId, page, offset, type, groupBy, limit, sponsored}: {q:string, volumeId:string, page?: number, offset?:number, type?:{type: 'groupe' | 'type', value:string}, groupBy?:string, limit?:number, sponsored?:boolean}){
+export function searchPublications({q, volumeId, page, offset, type, limit}: {q:string, volumeId:string, page?: number, offset?:number, type?:{type: 'groupe' | 'type', value:string}, limit?:number}){
   return search.collections('publications_link').documents().search({
     'q': q,
     'query_by'  : 'title.en, title.fr,description.en, description.fr, keywords.en, keywords.fr, organization.name',
-    'filter_by': `status:published && roots:=${volumeId} ${(type?.value && type.type === 'type') ? `&& publicationType.id:${type.value}` : ''} ${(type?.value && type.type === 'groupe') ? `&& publicationGroupe.id:${type.value}` : ''} ${sponsored ? '&& sponsored:true' : ''}`,
-    'group_by' : groupBy?groupBy:'',
+    'filter_by': `status:published && roots:=${volumeId} ${(type?.value && type.type === 'type') ? `&& publicationType.id:${type.value}` : ''} `,
     limit: (limit && limit > 0) ? limit :15,
     page : page? page:1,
     offset: offset?offset:0,
     facet_by :'publicationType.id',
-    'group_limit': 7,
     'text_match_type': 'max_score',
     'prioritize_token_position':true,
-    "sort_by": groupBy ? '_group_found:asc' : 'created_at:desc',
+    "sort_by": 'created_at:desc',
     'exclude_fields':'pinned_sources'
 
   })

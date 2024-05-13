@@ -110,8 +110,8 @@ export default function WidgetLayout() {
         width={'60vw'}
         placement='left'
         style={{
-            height: '70%',
-            top: '20%',
+            height: '70vh',
+            top: 'calc(30vh - 110px)',
             left:17
         }}
     >

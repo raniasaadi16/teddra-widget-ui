@@ -12,26 +12,28 @@ import { useHandleLimits } from '../../../../hooks/useHandleLimits';
 export default function AllPublicationsLayout() {
     const params = useParams()
     const [publications, setpublications] = useState<{document:Publication, highlight:Highlight}[]>([]);
-    const { containerRef, query, selectedPubType, setTotalHits, pagination, setPaginate } = useAppContext()
+    const { containerRef, query, selectedPubType, setTotalHits, pagination, setPaginate, clearSearch } = useAppContext()
     const { goTo } = useNavigateTo()
     useHandleLimits({type: 'publication', windowHeight: containerRef?.current?.clientHeight, setPaginate, resourcesWidth:containerRef?.current?.clientWidth})
-    useEffect(() => {
-       (async () =>  {
-        let id
-        if(params.serverId){
-            id = params.serverId
-        
-        }
-        if(params.volume){
-            id = params.volume 
-        }
-        if(!id) return
-        const res:any = await searchPublications({volumeId:id, q:query,type:selectedPubType,  page:pagination.currentPage, limit:pagination.limit, offset:pagination.offset})
+
+    const search = async () => {
+        const res:any = await searchPublications({volumeId:params.volume ? params.volume : params.serverId!, q:query ,type:selectedPubType,  page:pagination.currentPage, limit:pagination.limit, offset:pagination.offset})
         setpublications(res.hits)
         setTotalHits(res.found)
+        console.log(res.request_params)
+        console.log(query, 'res')
 
-       })()
-    }, [query, selectedPubType?.value, pagination.currentPage, pagination.limit, pagination.offset]);
+    }
+    useEffect(() => {
+        (async () => {
+            await search()
+
+        })()
+    }, [query, selectedPubType?.value, pagination.currentPage, pagination.limit, pagination.offset, params.volume, params.serverId]);
+
+
+
+    
   return (
     <>
 
@@ -40,7 +42,7 @@ export default function AllPublicationsLayout() {
                 <>
                 
         
-                    <Panel key={'publications'} header={<p className='text-groupe'>All publications</p>}>
+                    <Panel key={'publications'} header={<p className='text-groupe'>All publicationss</p>}>
                         <div className="pl-[19px]">
                             {publications && publications.length>0 ? <>
                                 <Publications setRecheckPin={() => {}} publications={publications} handlePublicationSelection={(publication) => goTo(`/all/publications/${publication.id}`, {state: {item:publication, url: publication.website}})} /> 

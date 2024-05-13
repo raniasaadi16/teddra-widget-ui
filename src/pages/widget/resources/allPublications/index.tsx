@@ -42,7 +42,7 @@ export default function AllPublicationsLayout() {
                 <>
                 
         
-                    <Panel key={'publications'} header={<p className='text-groupe'>All publicationss</p>}>
+                    <Panel key={'publications'} header={<p className='text-groupe'>All publications</p>}>
                         <div className="pl-[19px]">
                             {publications && publications.length>0 ? <>
                                 <Publications setRecheckPin={() => {}} publications={publications} handlePublicationSelection={(publication) => goTo(`/all/publications/${publication.id}`, {state: {item:publication, url: publication.website}})} /> 

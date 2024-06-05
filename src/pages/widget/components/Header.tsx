@@ -4,7 +4,7 @@ import { useAppContext } from '../../../context/appContext'
 
 export default function Header() {
     const navigate = useNavigate()
-    const { server, currentTab } = useAppContext()
+    const { server, currentTab, volume } = useAppContext()
     const params = useParams()
     const handleNavigation = (page: string) => {
       // navigate(`/widget${page}`, {state: location.state})
@@ -13,10 +13,11 @@ export default function Header() {
     const isActive = (page:string) => {
       return currentTab === page
     }
+    console.log(volume)
     return (
       <div className="border-b border-main bg-white">
-        <div className='bar-h flex items-center space-x-9 pl-[43px]'>
-            <button className={`${isActive('main') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/main`)}>{server?.title}</button>
+        <div className='bar-h flex items-center space-x-9 pl-[36px]'>
+            <button className={`${isActive('main') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/main`)}>{volume?.organizationId ? volume.title : server?.title}</button>
             <button className={`${isActive('network') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation(`/network`)}>Global network</button>
             {/* <button className={`${isActive('grid') && 'active-mode'} disabled:text-skin-muted`} onClick={() => handleNavigation('/grid')}>Search Grid</button> */}
 

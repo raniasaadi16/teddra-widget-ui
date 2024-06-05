@@ -12,7 +12,7 @@ export default function Servers({handleSelect, selectedThematic} : {handleSelect
 
     useEffect(() => {
         
-        searchVolumes({parentId: selectedThematic, filter:'(cfs_type:localServers || cfs_type:specDrives) && private:false', q:query}).then((data:any) => setvolumes(data.hits))
+        searchVolumes({parentId: selectedThematic, q:query}).then((data:any) => setvolumes(data.hits))
     }, [query]);
   return (
     <div>

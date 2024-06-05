@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useParams } from 'react-router';
-import { VolumeSearch } from '../../../../types';
-import {  searchVolumes } from '../../../../utils/search';
+import { Server } from '../../../../types';
 import Collapse, { Panel } from '../../../../components/shared/Collapse';
-import ObjectWithDropdown from '../../../../components/shared/object/objectWithIcon/Withdrpdown';
-import ResourceMenu from '../../../../components/shared/menu/ResourceMenu';
 import ReactSvg from '../../../../components/shared/ReactSvg';
-import { storageUrl } from '../../../../constants/apiRequests';
 import { useAppContext } from '../../../../context/appContext';
 import { renderHeightStyle } from '../../../../utils/utils';
 import useNavigateTo from '../../useNavigateTo';
-import { useHandleLimits } from '../../../../hooks/useHandleLimits';
+import { getDatacenterLocalServers } from '../../../../utils/requests';
+import ServerComponent from '../ServerComponent';
 
 export default function NetworkResourcesForServers() {
     const params = useParams()
-    const [volumes, setvolumes] = useState<{document:VolumeSearch}[]>([])
-    const { query , containerRef, setTotalHits, setPaginate, pagination} = useAppContext()
+    const [volumes, setvolumes] = useState<Server[]>([])
+    const { containerRef, setTotalHits, datacenter } = useAppContext()
     const { goTo } = useNavigateTo()
+    const [loading, setloading] = useState(false);
 
-    useHandleLimits({type: 'volume', windowHeight: containerRef?.current?.clientHeight, setPaginate,resourcesWidth:((containerRef?.current?.clientWidth)*0.67 -43)})
 
     useEffect(() => {
        (async () =>  {
@@ -28,66 +25,58 @@ export default function NetworkResourcesForServers() {
         
         }
         if(!id) return
-        const res:any = await searchVolumes({parentId:id, q:query, filter: 'cfs_type:=localServers', page:pagination.currentPage, limit:pagination.limit, offset:pagination.offset})
-        setvolumes(res.hits)
-        setTotalHits(res.found)
-
+        // const res:any = await searchVolumes({parentId:id, q:query, filter: 'cfs_type:=localServers', page:pagination.currentPage, limit:pagination.limit, offset:pagination.offset})
+        // setvolumes(res.hits)
+        setTotalHits(0)
+        fetch(getDatacenterLocalServers({id})).then(res => res.json()).then(data => {
+            setvolumes(data?.data?.tree)
+    
+          }).finally(() => setloading(false))
        })()
-    }, [query, pagination.currentPage, pagination.limit, pagination.offset]);
+    }, [params.datacenterId]);
   return (
     <>
 
         <div className="pt-[14px] overflow-auto flex-1" style={renderHeightStyle(containerRef?.current?.clientHeight)}>
-        <Collapse defaultActiveKey={['publications', 'volumes']}>
+     
+        <Collapse className='h-full flex flex-col space-y-2' defaultActiveKey={['0','1', '2', '3', '4']}>
             <>
-            
-                <Panel key={'volumes'} header={<p className='text-groupe'>Volumes</p>}>
-                    <div className='pl-[14px] '>
-                        <div className="flex flex-wrap gap-x-9">
-                            {volumes && volumes.length>0 ? (
-                                <>
-                                {volumes.map(volume => (
-                                        <ObjectWithDropdown
-                                        title={volume.document.title.en}
-                                        overlay={<ResourceMenu
-                                            items={{shortcut:true}}
+           
+       
+    
+            {volumes?.map((server,i) => (
+                <Panel header={<p className='text-groupe'>{server.title}</p>} key={`${i}`}>
+                    <div className='flex flex-wrap gap-y-5'>
+                        {server.children?.map(volume => (
+                             <ServerComponent
+                             title={volume.title}
+                       
+                             icon={<div className='relative w-full h-full '>
+                                 <ReactSvg src={`${volume.iconUrl}`} className='w-full h-full'
+         
+                                 />
+                             
+                                 
+                             </div>}
+                             key={volume.id}
+  
+                             active={volume.id === params.volumeId}
+                             onSelect={() => goTo(`/volumes/${volume.id}`, {state: {document: volume}})}
+                         />
                                 
-                                        />}
-                                        icon={<div className='relative w-full h-full '>
-                                            <ReactSvg src={`${storageUrl}${volume.document.iconUrl}`} className='w-full h-full'
-                    
-                                            />
-                                        
-                                            
-                                        </div>}
-                                        key={volume.document.id}
-                                        id={volume.document.id!}
-                                        description={<p className='truncate'>{volume.document.breadcrumbs?.[0]?.en!}</p>
-                                            
-                                        
-                                            
-                                        }
-                                        active={volume.document.id === params.volumeId}
-                                        onSelect={() => goTo(`/volumes/${volume.document.id}`, {state: volume.document})}
-                                    />
-                                    ))}
-                            
-                                </>
-                            ) : <p className='pl-2.5'>No volumes yet</p>}
-                        </div>
-                    
+
+                        ))}
+                
                     
                     </div>
+
                 </Panel>
-            
-            
+            ))}
             </>
         </Collapse>
 
         </div>
-        <div className='w-[33%]'>
             <Outlet/>
-        </div>
     </>
   )
 }

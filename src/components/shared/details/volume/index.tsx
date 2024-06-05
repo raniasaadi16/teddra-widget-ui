@@ -1,38 +1,24 @@
 import { useEffect, useState } from "react";
 import ObjectMode from "../modes/Object";
-import { useLocation, useParams } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import { Spin } from "antd";
 import { storageUrl } from "../../../../constants/apiRequests";
 import { getVolume } from "../../../../utils/search";
 import { OwnerType, PartnerType } from "../../../../types";
 import { getVolumOwner, getVolumWithPartners } from "../../../../utils/requests";
 import PartnerWithWebsite from "../../cards/partners/PartnerWithWebsite";
-import { renderHeightStyle } from "../../../../utils/utils";
-import { useAppContext } from "../../../../context/appContext";
+
 import OwnerWithWebsite from "../../cards/owner/OwnerWithWebsite";
+import { useDetaillsContext } from "../context/detailsContext";
 
 export default function VolumeDetails(){
-    const [volume,setvolume] = useState<{id:string,title:string, icon:string, breadcrumb:string, private:boolean, coll:string} | null>(null)
     const [loading, setloading] = useState(false)
-    const location = useLocation()
-    const params = useParams()
 
+    const { volume } = useDetaillsContext()
     const [partners, setpartners] = useState<PartnerType[] | null>(null);
     const [owner, setowner] = useState<OwnerType | null>(null);
-    const { containerRef } = useAppContext()
-
-    useEffect(()=>{
-        if(location.state?.id){
-            const item = location.state
-            setvolume({id:item.id ,title:item.title.en, icon:`${storageUrl}${item.iconUrl}`, breadcrumb:item.breadcrumbs?.[0]?.en, private:item.private, coll: item.cfs_type})
-
-        }else{
-            if(params.volumeId){
-                setloading(true)
-                getVolume({id:params.volumeId}).then((item:any) => setvolume({id:item.id ,title:item?.title.en, icon:`${storageUrl}${item?.iconUrl}`, breadcrumb:item?.breadcrumbs?.[0]?.en, private:item.private, coll: item.cfs_type})).finally(() => setloading(false))
-            }
-        }
-    },[location.state, params.volumeId])
+    
+ 
 
     useEffect(() => {
         if(volume){
@@ -56,7 +42,7 @@ export default function VolumeDetails(){
     }, [volume]);
     
     return(
-        <div className="overflow-auto" style={renderHeightStyle(containerRef?.current?.clientHeight)}>
+        <div className="overflow-auto">
             <Spin spinning={loading}>
                 {volume && <ObjectMode
                     fields={
@@ -67,8 +53,8 @@ export default function VolumeDetails(){
                                 center:true
                             },
                             {
-                                name:'Path',
-                                value:volume.breadcrumb,
+                                name:'Type',
+                                value:volume.private ? 'Commercial volume' : (volume.coll === 'specDrives' ? 'Specialized volume': (volume.coll === 'localServers' ? 'Country server' : 'Local volume')),
                                 center:true
                             },
                             ...(partners && partners.length >0) ? [
@@ -77,7 +63,7 @@ export default function VolumeDetails(){
                                     value: <div>
                                         {partners.map(partner => (
                                             <div key={partner.id}>
-                                                <PartnerWithWebsite partner={partner}/>
+                                                <PartnerWithWebsite partner={partner} volume={volume}/>
                                             </div>
                                         ))}
                                     </div>
@@ -88,7 +74,7 @@ export default function VolumeDetails(){
                                     name: 'Owner',
                                     value: <div>
                                         
-                                                <OwnerWithWebsite owner={owner}/>
+                                            <OwnerWithWebsite owner={owner} volume={volume}/>
                                         
                                     </div>
                                 }
@@ -104,5 +90,8 @@ export default function VolumeDetails(){
             </Spin>
 
         </div>
+
+
+
     )
 }

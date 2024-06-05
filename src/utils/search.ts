@@ -17,11 +17,11 @@ const TYPESENSE_CONFIG :any= {
 export const search = new Typesense.Client(TYPESENSE_CONFIG)
 
 
-export function searchVolumes({parentId, q,page, offset, limit, filter}: {parentId:string, q:string, page?: number, offset?:number, limit?:number,filter:string }){
+export function searchVolumes({parentId, q,page, offset, limit, filter}: {parentId:string, q:string, page?: number, offset?:number, limit?:number,filter?:string }){
   return search.collections('locations').documents().search({
     'q': q,
     'sort_by':'depth:asc',
-    'filter_by': `status:enabled && roots:${parentId} && ${filter}`,
+    'filter_by': `status:enabled && roots:${parentId} ${filter ? `&& ${filter}` : ''}`,
     'prioritize_token_position':true,
     'exclude_fields':'pinned_sources',
     'query_by'  : 'title.en, breadcrumbs.en, breadcrumbs.fr, description.en, description.fr, title.fr',

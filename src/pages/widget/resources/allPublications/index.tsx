@@ -12,7 +12,7 @@ import { useHandleLimits } from '../../../../hooks/useHandleLimits';
 export default function AllPublicationsLayout() {
     const params = useParams()
     const [publications, setpublications] = useState<{document:Publication, highlight:Highlight}[]>([]);
-    const { containerRef, query, selectedPubType, setTotalHits, pagination, setPaginate, clearSearch } = useAppContext()
+    const { containerRef, query, selectedPubType, setTotalHits, pagination, setPaginate, totalHits } = useAppContext()
     const { goTo } = useNavigateTo()
     useHandleLimits({type: 'publication', windowHeight: containerRef?.current?.clientHeight, setPaginate, resourcesWidth:containerRef?.current?.clientWidth})
 
@@ -20,8 +20,7 @@ export default function AllPublicationsLayout() {
         const res:any = await searchPublications({volumeId:params.volume ? params.volume : params.serverId!, q:query ,type:selectedPubType,  page:pagination.currentPage, limit:pagination.limit, offset:pagination.offset})
         setpublications(res.hits)
         setTotalHits(res.found)
-        console.log(res.request_params)
-        console.log(query, 'res')
+    
 
     }
     useEffect(() => {
@@ -42,7 +41,7 @@ export default function AllPublicationsLayout() {
                 <>
                 
         
-                    <Panel key={'publications'} header={<p className='text-groupe'>All publications</p>}>
+                    <Panel key={'publications'} header={<p className='text-groupe'>{totalHits} publications</p>}>
                         <div className="pl-[19px]">
                             {publications && publications.length>0 ? <>
                                 <Publications setRecheckPin={() => {}} publications={publications} handlePublicationSelection={(publication) => goTo(`/all/publications/${publication.id}`, {state: {item:publication, url: publication.website}})} /> 
@@ -56,9 +55,7 @@ export default function AllPublicationsLayout() {
             </Collapse>
 
         </div>
-        <div className='w-[33%]'>
             <Outlet/>
-        </div>
     </>
   )
 }

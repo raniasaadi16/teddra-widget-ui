@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { useAppContext } from '../context/appContext'
-import {  routeType } from '../types'
-import { useLocation } from 'react-router'
+import {  iconType, routeType } from '../types'
+
 type appBreadcrumbType = {
-    datacenter: {id:string, name:string} | null, 
-    server: {id:string, name:string} | null,
+    datacenter: {id:string, name:string, icon:iconType} | null, 
+    server: {id:string, name:string, overlay:JSX.Element} | null,
     volume: {id:string, name:string} | null,
 
 }
@@ -12,13 +12,18 @@ type appBreadcrumbType = {
 const appBreadcrumb = (props:appBreadcrumbType) => {
     const routes:routeType[] = [
         {
-            icon:{type:'icon', src:'Globe'}
+            icon:{type:'icon', src:'TeddraLogo'}
         },
        ...props?.datacenter? [{
         name:props?.datacenter.name,
+        icon: props?.datacenter.icon
        }] : [],
        ...props?.server? [{
         name:props?.server.name,
+        dropdown: {
+          overlay: props.server.overlay
+        }
+       
        }] : [],
        ...props?.volume? [{
         name:props?.volume.name,

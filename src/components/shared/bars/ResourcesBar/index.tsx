@@ -14,13 +14,7 @@ export const PanelBar = (props:Props) => {
                 <ResourcesTopBar isPublication={props.isPublication}/>
             
             </div>
-            {!props.noDetails && (
-                <div className='w-[33%] flex flex-col'>
-                    <DetailsTopBar/>
-                
-                </div>
-
-            )}
+         
          </div>
     )
 }

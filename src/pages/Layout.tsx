@@ -1,23 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Icon from '../components/icons/Icon'
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 import Locations from './widget/components/locations';
 import Dock from './widget/components/dock';
 import { useAppContext } from '../context/appContext';
 import { getVolum } from '../utils/requests';
 import { Spin } from 'antd';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
 
 
 export default function Layout() {
     const navigate = useNavigate()
-    const [selectedLocation, setselectedLocation] = useState<{name:string, path:string, network:{coll:string , id:string}} | null>(null);
     const [ifram, setifram] = useState('');
     const [value, setvalue] = useState('');
-    const { setDatacenter, setVolume } = useAppContext()
+    const { setDatacenter, setVolume, setSelectedLocation, selectedLocation } = useAppContext()
     const [loading, setloading] = useState(false);
-    
+    const location = useLocation()
+    const [searchParams, setSearchParams] = useSearchParams()
+
     const handleSelectLocation = (loc: {name:string, path:string, network:{coll:string , id:string}}) => {
-        setselectedLocation(loc)
+        setSelectedLocation(loc)
         setloading(true)
         fetch(getVolum({id:loc.network.id, coll:loc.network.coll})).then(res => res.json()).then(data => {
             if(loc.network.coll === 'datacenters'){
@@ -34,6 +36,14 @@ export default function Layout() {
     const handleGridNavigation = () => {
         navigate('/widget/grid')
     }
+    useEffect(() => {
+        const url = searchParams.get('url')
+        if(url){
+
+            setifram(url)
+            setvalue(url)
+        }
+    }, [location.search]);
     return (
         <div className='w-screen h-screen relative'>
             <iframe src={ifram} className='w-full h-full'></iframe>
@@ -43,13 +53,13 @@ export default function Layout() {
                     <Icon className='icon-sm' name='TeddraLogo'/>
                     <p>Teddra -</p>
                 </button> */}
-                <Dock handleNetworkNavigation={handleNetworkNavigation} handleGridNavigation={handleGridNavigation} path={selectedLocation?.path}/>
+                <Dock handleNetworkNavigation={handleNetworkNavigation} handleGridNavigation={handleGridNavigation} path={selectedLocation?.path} />
                 <div className='flex rounded border border-main'>
                     <Locations handleSelectLocation={handleSelectLocation} selectedLocation={selectedLocation?.name}/>
 
                     <input type="text" className='min-w-[300px] max-w-[400px] w-full border-none pl-2' placeholder='website' value={value} onChange={e => setvalue(e.target.value)} />
                     <button className='bg-skin-fill-inverted text-skin-inverted rounded-r px-4 disabled:opacity-20' disabled={!selectedLocation} onClick={() => {
-                        setifram(value)
+                        setSearchParams({url: value})
                     }}>Ok</button>
                 </div>
             

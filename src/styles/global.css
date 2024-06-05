@@ -818,6 +818,7 @@ box-shadow: none !important;
 
 .ant-drawer-body{
   padding: 0;
+  overflow-x: hidden;
 }
 .ant-drawer-mask{
   background-color: transparent;
@@ -1126,4 +1127,7 @@ box-shadow: none !important;
 .ant-tooltip-inner{
   padding: 20px 23px !important;
   border-radius: 10px !important;
+}
+.ant-drawer-left>.ant-drawer-content-wrapper{
+  transform: translate(0) !important;
 }

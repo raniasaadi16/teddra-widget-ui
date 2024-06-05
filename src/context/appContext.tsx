@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useRef, useState } from "react";
-import { Breadcrumb, routeType, Server } from "../types";
+import { Breadcrumb, PartnerType, routeType, Server } from "../types";
 
 type States = {
     
@@ -7,6 +7,7 @@ type States = {
    datacenter:Server|null,
    server:Server | null,
    volume:Server | null,
+   sponsors:PartnerType[] | null,
 
    WindowHeight:number,
    resourcesWidth:number,
@@ -19,7 +20,8 @@ type States = {
 
    pagination : { offset: number, limit: number, currentPage: number },
 
-   currentTab: 'main' | 'network' | 'grid'
+   currentTab: 'main' | 'network' | 'grid',
+   selectedLocation:{name:string, path:string, network:{coll:string , id:string}} | null
 }
 type Functions = {
 
@@ -38,8 +40,12 @@ type Functions = {
   setTotalHits: (value:number) => void,
   setQuery: (value:string) => void,
   containerRef:any,
+  rootRef:any,
+  setsponsors: (sponsors:PartnerType[]) => void,
+
   setcurrentTab : (data: 'main' | 'network' | 'grid') => void,
-  clearSearch:() => void
+  clearSearch:() => void,
+  setSelectedLocation : (data:{name:string, path:string, network:{coll:string , id:string}} | null) => void
 }
 type Props = States & Functions
 const AppContext = createContext<Props>({} as Props);
@@ -63,11 +69,15 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
    disabled: {publicationBar: false, query: false, filter:false, display:false},
    query: '',
    totalHits: 0,
-   currentTab: 'main'
+   currentTab: 'main',
+   sponsors:null,
+   selectedLocation:null
 
   })
   
   const containerRef = useRef()
+  const rootRef = useRef()
+
   const value = useMemo(() => {
     
 
@@ -182,6 +192,20 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
         currentTab: data
       }))
     }
+
+    const setsponsors = (sponsors:PartnerType[]) => {
+      setState((prev) => ({
+        ...prev,
+        sponsors
+      }))
+    }
+
+    const setSelectedLocation = (data:{name:string, path:string, network:{coll:string , id:string}} | null) => {
+      setState((prev) => ({
+        ...prev,
+        selectedLocation:data
+      }))
+    }
     return {
       ...state,
       setServer,
@@ -199,7 +223,10 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
       setresourcesWidth,
       containerRef,
       setcurrentTab,
-      setVolume
+      setVolume,
+      rootRef,
+      setsponsors, 
+      setSelectedLocation
     }
   }, [state])
 

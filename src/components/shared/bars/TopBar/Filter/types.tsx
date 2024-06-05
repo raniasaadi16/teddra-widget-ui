@@ -80,7 +80,7 @@ export default function TypesDropdown() {
     disabled={loading || disabled.filter}
     >
        
-        <button className="flex space-x-2 items-center px-4 py-1.5 rounded border border-main disabled:bg-skin-fill-muted disabled:cursor-not-allowed" disabled={loading || disabled.filter}>
+        <button className="flex space-x-2 items-center px-4 py-1.5 rounded disabled:bg-skin-fill-muted disabled:cursor-not-allowed disabled:opacity-20" disabled={loading || disabled.filter}>
                 {selectedPubType?.value ? <ReactSVG  beforeInjection={(svg) => {
         svg.setAttribute('style', 'width: 100%; height:100%; fill:inherit ')
       }} className="icon-sm" src={selectedPubType.icon}/> : <Icon className='icon-sm' name="FilterIcon"/>}

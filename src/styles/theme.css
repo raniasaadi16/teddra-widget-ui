@@ -380,7 +380,7 @@ svg[fill="transparent"]{
 @apply w-[40px] h-[40px];
 }
 .bar-h{
-    @apply h-[42px];
+    @apply h-[44px];
 }
 .bar-h-mini{
   @apply h-[30px]

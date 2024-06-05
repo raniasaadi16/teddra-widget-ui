@@ -46,7 +46,10 @@ export type Server = {
     iconUrl:string
     description?:string,
     status: 'enabled' | 'coming_soon' | 'disabled',
-    icon?:string,
+    icon?:{
+        src:string,
+
+    },
     depth?:number,
     path:string,
     node?:boolean,
@@ -70,7 +73,11 @@ export type Server = {
     coll?:string,
     cfs_type:string,
     parents?:{name:string, path:string}[],
-    media?:boolean
+    media?:boolean,
+    organizationId?:string,
+    serverId:string[]
+    datacenterId:string[]
+
 } 
 export type ServerWithHomeDesq = Server & {
     image?:string,
@@ -108,7 +115,8 @@ export type VolumeSearch = {
     private:boolean,
     roots:string[],
     datacenterId:string[],
-    parentId:string
+    parentId:string,
+    serverId:string[]
 }
 export type PartnerType = {
     type: 'sponsor' | 'media_partener',
@@ -188,7 +196,10 @@ export type TopbarTitleProps = {
 export type routeType = {
     action?:() => void,
   name?:string,
-  icon?:iconType
+  icon?:iconType,
+  dropdown?:{
+    overlay:JSX.Element
+  }
 }
 export type Breadcrumb = {
   routes : routeType[],
@@ -204,7 +215,7 @@ export type TitleProps = {
 export type PathProps = {
   Breadcrumb?:Breadcrumb,
   extra?:JSX.Element,
-  search?:React.InputHTMLAttributes<HTMLInputElement>,
+  search?:JSX.Element,
 }
 export type ResourcesActions = {
   filter?: {

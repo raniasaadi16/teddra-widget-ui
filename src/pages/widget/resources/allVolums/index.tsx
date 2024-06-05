@@ -15,7 +15,7 @@ import { storageUrl } from '../../../../constants/apiRequests';
 export default function AllVolumsLayout() {
     const params = useParams()
     const [volumes, setvolumes] = useState<{document:VolumeSearch}[]>([]);
-    const { containerRef, query, setTotalHits, pagination, setPaginate } = useAppContext()
+    const { containerRef, query, setTotalHits, pagination, setPaginate, totalHits, volume } = useAppContext()
     const { goTo } = useNavigateTo()
     useHandleLimits({type: 'volume', windowHeight: containerRef?.current?.clientHeight, setPaginate,resourcesWidth:((containerRef?.current?.clientWidth)*0.67 -43)})
     useEffect(() => {
@@ -43,12 +43,12 @@ export default function AllVolumsLayout() {
                 <>
                 
         
-                    <Panel key={'volumes'} header={<p className='text-groupe'>All Volumes</p>}>
+                    <Panel key={'volumes'} header={<p className='text-groupe'>{totalHits} Volumes</p>}>
                         <div className="pl-[19px]">
                         <div className="flex flex-wrap gap-x-9">
                         {volumes && volumes.length>0 ? (
                             <>
-                            {volumes.map(volume => (
+                            {volumes.filter(v => v.document.id !== volume?.id).map(volume => (
                                     <ObjectWithDropdown
                                     title={volume.document.title.en}
                                     overlay={<ResourceMenu
@@ -85,9 +85,7 @@ export default function AllVolumsLayout() {
             </Collapse>
 
         </div>
-        <div className='w-[33%]'>
             <Outlet/>
-        </div>
     </>
   )
 }

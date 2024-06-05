@@ -5,9 +5,10 @@ type Props = {
     all?:boolean, 
     windowHeight:number,
     type: 'publication' | 'volume',
-    resourcesWidth:number
+    resourcesWidth:number,
+    containerHeight?:number
 }
-export const useHandleLimits= ({setPaginate , windowHeight, type, resourcesWidth}:Props) => {
+export const useHandleLimits= ({setPaginate , windowHeight, type, resourcesWidth, containerHeight}:Props) => {
     const [volumesColums, setvolumesColums] = useState(1);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ export const useHandleLimits= ({setPaginate , windowHeight, type, resourcesWidth
     }, [resourcesWidth]);
     useEffect(() => {
         function handleResize() {
-            const limit = Math.round((windowHeight-240)/(type === 'publication' ? 30 : 70/volumesColums)) - (type === 'publication' ? 1 : 0)
+            const limit = Math.round((windowHeight-(containerHeight ? containerHeight : 240))/(type === 'publication' ? 30 : 70/volumesColums)) - (type === 'publication' ? 1 : 0)
             if(limit > 0){
               setPaginate({limit})
             }else{

@@ -39,40 +39,42 @@ export default function OwnerWithWebsite({ owner, imgHeight,active,volume } : Pa
             title={owner.name}
             description={owner.description}
             type=''
-            links={<div>
-              <Dropdown
-              trigger={['click']} 
-              onVisibleChange={(v) => setvisible(v)}
-              overlay={
-                <div className='rounded bg-white p-1.5 teddra-shadow ml-5 w-[200px] '>
-                  <a className='flex space-x-3 items-center px-4 py-2 bg-hover-transparent rounded !text-inherit hover:text-inherit' href={owner.website} target='_blank'>
-                      <Icon className='icon-sm' name='OpenWindow'/>
-                      <p>To website</p>
-                  </a>
-                  <button className='flex space-x-3 items-center px-4 py-2 bg-hover-transparent rounded !text-inherit hover:text-inherit w-full' onClick={() => navigate('./publications')}>
-                      <Icon className='icon-sm' name='OpenWindow'/>
-                      <p>To publications</p>
-                  </button>
-                  <button className='flex space-x-3 items-center w-full px-4 py-2 bg-hover-transparent rounded !text-inherit hover:text-inherit' onClick={handleNavigation} >
-                      <Icon className='icon-sm' name='OpenWindow'/>
-                      <p className='truncate flex'>To widget</p>
-                  </button>
-                </div>
-              } 
-              getPopupContainer={() => containerRef?.current}
-              >
-                <button className={`border border-main rounded px-4 py-2 ${visible ? 'bg-skin-fill-inverted text-skin-inverted' : ' bg-hover-transparent'}`}>
-                    <div className="flex space-x-5 items-center">
-                      <div className="flex items-center space-x-3">
-                        <Icon className='icon-sm' name='OpenWindow'/>
-                        <p>Acceder</p>
-                      </div>
-                      <ChevronDownIcon className='icon-mini'/>
-                    </div>
+            links={<button onClick={handleNavigation}><Icon name='OpenWindow' className='icon-sm'/></button>}
 
-                </button>
-              </Dropdown>
-            </div>}
+            // links={<div>
+            //   <Dropdown
+            //   trigger={['click']} 
+            //   onVisibleChange={(v) => setvisible(v)}
+            //   overlay={
+            //     <div className='rounded bg-white p-1.5 teddra-shadow ml-5 w-[200px] '>
+            //       <a className='flex space-x-3 items-center px-4 py-2 bg-hover-transparent rounded !text-inherit hover:text-inherit' href={owner.website} target='_blank'>
+            //           <Icon className='icon-sm' name='OpenWindow'/>
+            //           <p>To website</p>
+            //       </a>
+            //       <button className='flex space-x-3 items-center px-4 py-2 bg-hover-transparent rounded !text-inherit hover:text-inherit w-full' onClick={() => navigate('./publications')}>
+            //           <Icon className='icon-sm' name='OpenWindow'/>
+            //           <p>To publications</p>
+            //       </button>
+            //       <button className='flex space-x-3 items-center w-full px-4 py-2 bg-hover-transparent rounded !text-inherit hover:text-inherit' onClick={handleNavigation} >
+            //           <Icon className='icon-sm' name='OpenWindow'/>
+            //           <p className='truncate flex'>To widget</p>
+            //       </button>
+            //     </div>
+            //   } 
+            //   getPopupContainer={() => containerRef?.current}
+            //   >
+            //     <button className={`border border-main rounded px-4 py-2 ${visible ? 'bg-skin-fill-inverted text-skin-inverted' : ' bg-hover-transparent'}`}>
+            //         <div className="flex space-x-5 items-center">
+            //           <div className="flex items-center space-x-3">
+            //             <Icon className='icon-sm' name='OpenWindow'/>
+            //             <p>Acceder</p>
+            //           </div>
+            //           <ChevronDownIcon className='icon-mini'/>
+            //         </div>
+
+            //     </button>
+            //   </Dropdown>
+            // </div>}
             // links={<button onClick={handleNavigation}><Icon name='OpenWindow' className='icon-sm'/></button>}
 
           />

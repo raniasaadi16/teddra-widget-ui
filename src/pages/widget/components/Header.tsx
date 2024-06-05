@@ -13,7 +13,6 @@ export default function Header() {
     const isActive = (page:string) => {
       return currentTab === page
     }
-    console.log(volume)
     return (
       <div className="border-b border-main bg-white">
         <div className='bar-h flex items-center space-x-9 pl-[36px]'>

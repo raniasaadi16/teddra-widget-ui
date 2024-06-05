@@ -21,9 +21,8 @@ import PrivateRoute from './components/shared/PrivateRoute';
 import Login from './pages/connect';
 import Partner from './pages/widget/partner';
 import VolumeDetails from './components/shared/details/volume'; 
-import { DetaillsContextProvider } from './components/shared/details/context/detailsContext';
 import PublicationDetailsLayout from './components/shared/details/Publications/PublicationDetailsLayout';
-import VolumPublications from './components/shared/details/volume/publications';
+import FolderPublications from './pages/widget/resources/folderPublications';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -56,7 +55,7 @@ const router = createBrowserRouter(
             <Route element={<NetworkResourcesForServers/>}>
               <Route path='/widget/network/:datacenterId/:serverId' element={<></>}/>
               {/**VOLUME DETAILS */}
-              <Route element={<DetaillsContextProvider><VolumeDetailsLayout/></DetaillsContextProvider>}>
+              <Route element={<VolumeDetailsLayout/>}>
                 <Route path='/widget/network/:datacenterId/:serverId/volumes/:volumeId' element={<VolumeDetails/>}/>
                 
 
@@ -67,7 +66,7 @@ const router = createBrowserRouter(
             <Route element={<NetworkResourcesForVolumes/>}>
               <Route path='/widget/network/:datacenterId/:serverId/:type/:volume' element={<></>}/>
               {/**VOLUME DETAILS */}
-              <Route element={<DetaillsContextProvider><VolumeDetailsLayout/></DetaillsContextProvider>}>
+              <Route element={<VolumeDetailsLayout/>}>
                  <Route path='/widget/network/:datacenterId/:serverId/:type/:volume/volumes/:volumeId' element={<VolumeDetails/>}/>
 
                 
@@ -89,15 +88,20 @@ const router = createBrowserRouter(
                 
               </Route>
               {/**VOLUME DETAILS IN THE FIRST PAGE */}
-              <Route element={<DetaillsContextProvider><VolumeDetailsLayout/></DetaillsContextProvider>}>
+              <Route element={<VolumeDetailsLayout/>}>
                 <Route path='/widget/main/:datacenterId/:serverId/volumes/:volumeId' element={<VolumeDetails/>}/>
                 <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/volumes/:volumeId' element={<VolumeDetails/>}/>
-                <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/volumes/:volumeId/publications' element={<VolumPublications/>}/>
-                <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/volumes/:volumeId/publications/:publicationId' element={<PublicationDetails/>}/>
-                <Route path='/widget/main/:datacenterId/:serverId/volumes/:volumeId/publications' element={<VolumPublications/>}/>
-                <Route path='/widget/main/:datacenterId/:serverId/volumes/:volumeId/publications/:publicationId' element={<PublicationDetails/>}/>
+                {/* <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/volumes/:volumeId/publications/:publicationId' element={<PublicationDetails/>}/> */}
+                {/* <Route path='/widget/main/:datacenterId/:serverId/volumes/:volumeId/publications/:publicationId' element={<PublicationDetails/>}/> */}
               </Route>
+            </Route>
            
+            <Route element={<FolderPublications/>}>
+              <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/volumes/:volumeId/publications' element={<></>}/>
+              <Route element={<PublicationDetailsLayout/>}>
+                <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/volumes/:volumeId/publications/:publicationId' element={<PublicationDetails/>}/>
+
+              </Route>
             </Route>
 
 
@@ -116,16 +120,21 @@ const router = createBrowserRouter(
               <Route path='/widget/main/:datacenterId/:serverId/all/volumes' element={<></>}/>
               <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes' element={<></>}/>
               {/**VOLUME DETAILS IN THE ALL VOLUMES PAGE */}
-              <Route element={<DetaillsContextProvider><VolumeDetailsLayout/></DetaillsContextProvider>}>
+              <Route element={<VolumeDetailsLayout/>}>
                 <Route path='/widget/main/:datacenterId/:serverId/all/volumes/:volumeId' element={<VolumeDetails/>}/>
                 <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes/:volumeId' element={<VolumeDetails/>}/>
-                <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes/:volumeId/publications' element={<VolumPublications/>}/>
-                <Route path='/widget/main/:datacenterId/:serverId/all/volumes/:volumeId/publications' element={<VolumPublications/>}/>
-                <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes/:volumeId/publications/:publicationId' element={<PublicationDetails/>}/>
-                <Route path='/widget/main/:datacenterId/:serverId/all/volumes/:volumeId/publications/:publicationId' element={<PublicationDetails/>}/>
+                {/* <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes/:volumeId/publications/:publicationId' element={<PublicationDetails/>}/> */}
+                {/* <Route path='/widget/main/:datacenterId/:serverId/all/volumes/:volumeId/publications/:publicationId' element={<PublicationDetails/>}/> */}
               </Route>
 
             </Route>
+            {/* <Route element={<FolderPublications/>}>
+              <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes/:volumeId/publications' element={<></>}/>
+              <Route element={<PublicationDetailsLayout/>}>
+                <Route path='/widget/main/:datacenterId/:serverId/:type/:volume/all/volumes/:volumeId/:publicationId' element={<PublicationDetails/>}/>
+
+              </Route>
+            </Route> */}
 
           </Route>
 

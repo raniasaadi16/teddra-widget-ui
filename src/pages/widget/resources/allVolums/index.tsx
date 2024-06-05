@@ -29,12 +29,18 @@ export default function AllVolumsLayout() {
             id = params.volume 
         }
         if(!id) return
-        const res:any = await searchVolumes({parentId:id, q:query,  page:pagination.currentPage, limit:pagination.limit, offset:pagination.offset, filter:'cfs_type:!=localServers'})
+        let filter = ''
+        if(volume?.organizationId){
+            filter = 'cfs_type:!=localServers'
+        }else{
+            filter='cfs_type:!=localServers && cfs_type:!=privateFolders'
+        }
+        const res:any = await searchVolumes({parentId:id, q:query,  page:pagination.currentPage, limit:pagination.limit, offset:pagination.offset, filter})
         setvolumes(res.hits)
         setTotalHits(res.found)
 
        })()
-    }, [query, pagination.currentPage, pagination.limit, pagination.offset]);
+    }, [query, pagination.currentPage, pagination.limit, pagination.offset, volume]);
   return (
     <>
 
@@ -48,29 +54,36 @@ export default function AllVolumsLayout() {
                         <div className="flex flex-wrap gap-x-9">
                         {volumes && volumes.length>0 ? (
                             <>
-                            {volumes.filter(v => v.document.id !== volume?.id).map(volume => (
+                            {volumes.filter(v => v.document.id !== volume?.id).map(childVolume => (
                                     <ObjectWithDropdown
-                                    title={volume.document.title.en}
+                                    title={childVolume.document.title.en}
                                     overlay={<ResourceMenu
                                         items={{shortcut:true}}
                                
                                     />}
                                     icon={<div className='relative w-full h-full '>
-                                        <ReactSvg src={`${storageUrl}${volume.document.iconUrl}`} className='w-full h-full'
+                                        <ReactSvg src={`${storageUrl}${childVolume.document.iconUrl}`} className='w-full h-full'
                  
                                         />
                                     
                                         
                                     </div>}
-                                    key={volume.document.id}
-                                    id={volume.document.id!}
-                                    description={<p className='truncate'>{volume.document.breadcrumbs?.[0]?.en!}</p>
+                                    key={childVolume.document.id}
+                                    id={childVolume.document.id!}
+                                    description={<p className='truncate'>{childVolume.document.breadcrumbs?.[0]?.en!}</p>
                                         
                                     
                                         
                                     }
-                                    active={volume.document.id === params.volumeId}
-                                    onSelect={() => goTo(`/all/volumes/${volume.document.id}`, {state: volume.document})}
+                                    active={childVolume.document.id === params.volumeId}
+                                    onSelect={() =>{
+                                        if(volume?.organizationId && (childVolume.document.organizationId === volume?.organizationId)){
+                                            goTo(`/volumes/${childVolume.document.id}/publications`, {state: childVolume.document})
+                                        }else{
+                                            goTo(`/all/volumes/${childVolume.document.id}`, {state: childVolume.document})
+
+                                        }
+                                    }}
                                 />
                                 ))}
                         

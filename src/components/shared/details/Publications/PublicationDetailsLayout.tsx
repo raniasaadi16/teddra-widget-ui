@@ -6,12 +6,11 @@ import DetailsLayout from '../layout'
 
 
 export default function PublicationDetailsLayout() {
-    const location = useLocation()
   
 
    
   return (
-    <DetailsLayout loading={false} prevPath={location.pathname.includes('all') ? '..': '../..'}>
+    <DetailsLayout loading={false} >
 
    
         

@@ -9,15 +9,34 @@ import { getVolumOwner, getVolumWithPartners } from "../../../../utils/requests"
 import PartnerWithWebsite from "../../cards/partners/PartnerWithWebsite";
 
 import OwnerWithWebsite from "../../cards/owner/OwnerWithWebsite";
-import { useDetaillsContext } from "../context/detailsContext";
 
 export default function VolumeDetails(){
     const [loading, setloading] = useState(false)
 
-    const { volume } = useDetaillsContext()
     const [partners, setpartners] = useState<PartnerType[] | null>(null);
     const [owner, setowner] = useState<OwnerType | null>(null);
-    
+    const params = useParams()
+    const [volume, setVolume] = useState<{id: string;
+        title: string;
+        icon: string;
+        breadcrumb: string;
+        private: boolean;
+        coll: string;}| null>();
+    const location = useLocation()
+
+
+    useEffect(()=>{
+        if(location.state?.id){
+            const item = location.state
+            setVolume({id:item.id ,title:item.title.en, icon:`${storageUrl}${item.iconUrl}`, breadcrumb:item.breadcrumbs?.[0]?.en, private:item.private, coll: item.cfs_type})
+
+        }else{
+            if(params.volumeId){
+                setloading(true)
+                getVolume({id:params.volumeId}).then((item:any) => setVolume({id:item.id ,title:item?.title.en, icon:`${storageUrl}${item?.iconUrl}`, breadcrumb:item?.breadcrumbs?.[0]?.en, private:item.private, coll: item.cfs_type})).finally(() => setloading(false))
+            }
+        }
+    },[location.state, params.volumeId])
  
 
     useEffect(() => {
@@ -42,7 +61,6 @@ export default function VolumeDetails(){
     }, [volume]);
     
     return(
-        <div className="overflow-auto">
             <Spin spinning={loading}>
                 {volume && <ObjectMode
                     fields={
@@ -89,7 +107,6 @@ export default function VolumeDetails(){
             
             </Spin>
 
-        </div>
 
 
 

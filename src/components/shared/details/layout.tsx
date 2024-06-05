@@ -4,11 +4,11 @@ import { Drawer, Spin,  } from 'antd'
 import { useAppContext } from '../../../context/appContext'
 import DetailsTopBar from '../bars/ResourcesBar/DetailsPanel'
 import { Close } from '../../icons'
-import { DetaillsContextProvider } from './context/detailsContext'
+import { renderDtailsHeightStyle } from '../../../utils/utils'
 
 
 
-export default function DetailsLayout({children, loading, prevPath}: {children:JSX.Element, loading:boolean, prevPath:string}) {
+export default function DetailsLayout({children, loading}: {children:JSX.Element, loading:boolean}) {
 
     const { containerRef } = useAppContext()
     const [visible, setvisible] = useState(false);
@@ -27,6 +27,9 @@ export default function DetailsLayout({children, loading, prevPath}: {children:J
       getContainer={() => containerRef?.current}
       onClose={() => navigate(-1)}
       closable={false}
+      style={{
+        right: -8
+      }}
     >
 
         <div className='h-full w-full bg-white relative z-[100]'>
@@ -38,7 +41,7 @@ export default function DetailsLayout({children, loading, prevPath}: {children:J
                   </button>
 
               </div>
-              <div className={` overflow-hidden`} >
+              <div className={` overflow-auto`} style={renderDtailsHeightStyle(containerRef?.current?.clientHeight)}>
                   <Spin spinning={loading}>
                       {children}
                   </Spin>

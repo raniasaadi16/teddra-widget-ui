@@ -7,6 +7,8 @@ type States = {
    datacenter:Server|null,
    server:Server | null,
    volume:Server | null,
+   folder:{id:string, title:string} | null,
+
    sponsors:PartnerType[] | null,
 
    WindowHeight:number,
@@ -29,6 +31,8 @@ type Functions = {
   setDatacenter:(data:Server | null) => void,
   setServer:(data:Server | null) => void,
   setVolume:(data:Server | null) => void,
+  setFolder:(data:{id:string, title:string} | null) => void,
+
 
   setWindowHeight: (value:number) => void,
   setresourcesWidth: (value:number) => void
@@ -71,7 +75,8 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
    totalHits: 0,
    currentTab: 'main',
    sponsors:null,
-   selectedLocation:null
+   selectedLocation:null,
+   folder:null
 
   })
   
@@ -109,6 +114,14 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
         volume:data
       }))
     }
+
+    const setFolder =(data:{id:string, title:string} | null) => {
+      setState((prev) => ({
+        ...prev,
+        folder:data
+      }))
+    }
+
 
 
     const setWindowHeight = (value:number) => {
@@ -226,7 +239,8 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
       setVolume,
       rootRef,
       setsponsors, 
-      setSelectedLocation
+      setSelectedLocation,
+      setFolder
     }
   }, [state])
 

@@ -15,12 +15,13 @@ import { storageUrl } from '../../constants/apiRequests';
 import { Breadcrumb } from '../../components/shared/breadcrumb';
 import { Close } from '../../components/icons';
 import ServerOverlay from '../../components/shared/breadcrumb/overlays/ServerOverlay';
+import { getVolume } from '../../utils/search';
 
 export default function WidgetLayout() {
     const [visible, setvisible] = useState(false);
     const navigate = useNavigate()
     const params = useParams()
-    const { setDatacenter,containerRef,setsponsors,  server, setServer, setVolume, datacenter, breadcrum,setWindowHeight, setdisable, disabled, query, setQuery, pagination, setPaginate, totalHits, setresourcesWidth, currentTab, volume, clearSearch} = useAppContext()
+    const { setDatacenter,containerRef,setsponsors,  server, setServer, setVolume, datacenter, breadcrum,setWindowHeight, setdisable, disabled, query, setQuery, pagination, setPaginate, totalHits, setresourcesWidth, currentTab, volume, clearSearch, folder, setFolder } = useAppContext()
     const [loading, setloading] = useState(false);
     const location = useLocation()
     const [all, setall] = useState(false);
@@ -30,7 +31,7 @@ export default function WidgetLayout() {
         setWindowHeight(containerRef?.current?.clientHeight)
         setresourcesWidth(containerRef?.current?.clientWidth)
     }, [containerRef?.current]);
-    useSetBreadcrumb({datacenter:datacenter?{id:datacenter?.id, name:datacenter?.title, icon:{src:datacenter.iconUrl, type: 'image'}} : null, server:server?{id:server?.id, name:server?.title, overlay: <ServerOverlay id={server.id}/>} : null, volume:volume?{id:volume?.id, name:volume?.title} : null })
+    useSetBreadcrumb({datacenter:datacenter?{id:datacenter?.id, name:datacenter?.title, icon:{src:datacenter.iconUrl, type: 'image'}} : null, server:server?{id:server?.id, name:server?.title, overlay: <ServerOverlay id={server.id}/>} : null, volume:volume?{id:volume?.id, name:volume?.title} : null, folder: folder ? {id :folder.id, name:folder.title} : null })
     useEffect(() => {
 
         (async () => {
@@ -57,7 +58,6 @@ export default function WidgetLayout() {
               console.log('fetch server')
               setloading(true)
               fetch(getVolumWithPartners({id:params.serverId, coll:'localServers'})).then(res => res.json()).then(data => {
-                console.log(data, params.serverId)
                 setServer(data.data.volume);
                 !params.volume && setsponsors(data.data.sponsors)
               }).finally(() => setloading(false))
@@ -82,6 +82,26 @@ export default function WidgetLayout() {
            
         })()        
       }, [params.volume])
+
+       useEffect(()=>{
+        if(params.volumeId && volume?.organizationId && !params.publicationId){
+          console.log('fetch folder')
+          if(location.state?.cfs_type){
+              console.log('set folder')
+              const item = location.state
+              setFolder({id:item.id ,title:item.title.en})
+  
+          }else{
+              console.log('request folder')
+             getVolume({id:params.volumeId}).then((item:any) => setFolder({id:item.id ,title:item?.title.en}))
+             
+          }
+
+        }else{
+          setFolder(null)
+        }
+    },[location.state, params.volumeId, volume, params.publicationId])
+
 
       useEffect(() => {
         if(location.pathname.includes('all/publications')){

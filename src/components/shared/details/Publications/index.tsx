@@ -5,11 +5,11 @@ import { storageUrl } from '../../../../constants/apiRequests'
 
 import Icon from '../../../icons/Icon'
 
-import { useDetaillsContext } from '../context/detailsContext'
 import { useEffect, useState } from 'react'
 import { Publication } from '../../../../types'
 import { useLocation, useParams } from 'react-router'
 import { getPublication } from '../../../../utils/search'
+import { Spin } from 'antd'
 
 
 export default function PublicationDetails() {
@@ -18,7 +18,7 @@ export default function PublicationDetails() {
     const location = useLocation()
     const params= useParams()
     const [loading, setloading] = useState(false);
-    const { publication:item, setPublication } = useDetaillsContext()
+    const [publication, setPublication] = useState<Publication | null>(null);
 
     useEffect(() => {
         if(location.state){
@@ -41,44 +41,44 @@ export default function PublicationDetails() {
 
    
         
-            <>
-              {item && (
+            <Spin spinning={loading}>
+              {publication && (
                 <ObjectMode 
-                  thumb={item.thumbnail ? {
+                  thumb={publication.thumbnail ? {
                       type:'slide',
-                      images: item.media ? [{src: item.thumbnail, type:'image'},...item.media] : [{src: item.thumbnail, type:'image'}]
+                      images: publication.media ? [{src: publication.thumbnail, type:'image'},...publication.media] : [{src: publication.thumbnail, type:'image'}]
                   }: {
                     type: 'icon',
-                    icon:{type:'image', src:`${storageUrl}${item.publicationType.iconUrl}`}
+                    icon:{type:'image', src:`${storageUrl}${publication.publicationType.iconUrl}`}
                   }}
 
                   fields={
                     [
                       {
                         name: 'Webpage',
-                        value: <a href={item.url} className='!text-inherit' target='_blank'><Icon name='OpenWindow' className='icon-sm'/></a>
+                        value: <a href={publication.url} className='!text-inherit' target='_blank'><Icon name='OpenWindow' className='icon-sm'/></a>
                       },
                       {
                         name:'Title',
-                        value: item.title[item.local]!,
+                        value: publication.title[publication.local]!,
                       },
                       {
                         name:'Type',
-                        value: item.publicationType.title.en!,
+                        value: publication.publicationType.title.en!,
                         center:true
                       },
-                      ...item.description?.[item.local] ? [
+                      ...publication.description?.[publication.local] ? [
                         {
                           name: 'Description',
-                          value:<p dangerouslySetInnerHTML={{__html: item.description[item.local]!}} style={{lineHeight:'1.6'}}></p>
+                          value:<p dangerouslySetInnerHTML={{__html: publication.description[publication.local]!}} style={{lineHeight:'1.6'}}></p>
 
                         }
                       ]:[],
-                      ...item.keywords?.[item.local]?.length > 0 ? [
+                      ...publication.keywords?.[publication.local]?.length > 0 ? [
                         {
                           name: 'Keywords',
                           value:<div className="flex-1 flex flex-wrap gap-1">
-                          {item.keywords[item.local].map((keyword : string) => <p key={keyword} className='px-3 py-1.5 rounded-full border border-main text-verysmall'>{keyword}</p>) }
+                          {publication.keywords[publication.local].map((keyword : string) => <p key={keyword} className='px-3 py-1.5 rounded-full border border-main text-verysmall'>{keyword}</p>) }
                           </div>
 
                         }
@@ -89,7 +89,7 @@ export default function PublicationDetails() {
 
               )}
 
-            </>
+            </Spin>
       
 
     

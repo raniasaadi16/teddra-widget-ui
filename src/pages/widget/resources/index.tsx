@@ -22,6 +22,17 @@ export default function ResourcesLayout() {
     const [totalHits, settotalHits] = useState({volumes: 0, publications:0});
     const { goTo } = useNavigateTo()
 
+    const generateFilter = () => {
+        if(volume){
+            if(volume.organizationId){
+               return 'cfs_type:!=specDrives'
+            }else{
+                return 'cfs_type:!=specDrives  && cfs_type:!=privateFolders'
+            }
+        }else{
+            return 'cfs_type:!=localServers && cfs_type:!=privateFolders'
+        }
+    }
     useEffect(() => {
        (async () =>  {
         let id
@@ -34,14 +45,15 @@ export default function ResourcesLayout() {
         }
         if(!id) return
         if(query.length >2 || query.length === 0){
-            const res:any = await searchVolumeResource({id, query: query, filter: `${params.volume ? 'cfs_type:!=specDrives' : 'cfs_type:!=localServers'}`})
+          
+            const res:any = await searchVolumeResource({id, query: query, filter:generateFilter()})
             setpublications(res.results[0]?.hits)
             setvolumes(res.results[1]?.hits)
             settotalHits({volumes: res.results[1]?.found, publications:res.results[0]?.found})
         }
 
        })()
-    }, [query, params.serverId, params.volume]);
+    }, [query, params.serverId, params.volume, volume]);
 
 
   return (
@@ -74,29 +86,36 @@ export default function ResourcesLayout() {
                     <div className='pl-[14px] '>
                         <div className="flex flex-wrap gap-x-9">
                     
-                                {volumes.filter(v => v.document.id !== volume?.id).map(volume => (
+                                {volumes.filter(v => v.document.id !== volume?.id).map(childVolume => (
                                         <ObjectWithDropdown
-                                        title={volume.document.title.en}
+                                        title={childVolume.document.title.en}
                                         overlay={<ResourceMenu
                                             items={{shortcut:true}}
                                 
                                         />}
                                         icon={<div className='relative w-full h-full '>
-                                            <ReactSvg src={`${storageUrl}${volume.document.iconUrl}`} className='w-full h-full'
+                                            <ReactSvg src={`${storageUrl}${childVolume.document.iconUrl}`} className='w-full h-full'
                     
                                             />
                                         
                                             
                                         </div>}
-                                        key={volume.document.id}
-                                        id={volume.document.id!}
-                                        description={<p className='truncate'>{volume.document.breadcrumbs?.[0]?.en!}</p>
+                                        key={childVolume.document.id}
+                                        id={childVolume.document.id!}
+                                        description={<p className='truncate'>{childVolume.document.breadcrumbs?.[0]?.en!}</p>
                                             
                                         
                                             
                                         }
-                                        active={volume.document.id === params.volumeId}
-                                        onSelect={() => goTo(`/volumes/${volume.document.id}`, {state: volume.document})}
+                                        active={childVolume.document.id === params.volumeId}
+                                        onSelect={() => {
+                                            if(volume?.organizationId && (childVolume.document.organizationId === volume?.organizationId)){
+                                                goTo(`/volumes/${childVolume.document.id}/publications`, {state: childVolume.document})
+                                            }else{
+                                                goTo(`/volumes/${childVolume.document.id}`, {state: childVolume.document})
+
+                                            }
+                                        }}
                                     />
                                     ))}
                             

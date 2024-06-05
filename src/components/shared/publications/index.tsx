@@ -22,6 +22,7 @@ export default function Publications({ publications, handlePublicationSelection,
             <div>
                {publications && publications?.length > 0 && publications.map((item:any) => (
                     <OneLineItem
+                    key={item.document?.id}
                     item={item}
                     active={item.document?.id && (params?.publicationId === item.document?.id)}
                     renderDate={renderDate}

@@ -17,7 +17,7 @@ export default function AllVolumsLayout() {
     const [volumes, setvolumes] = useState<{document:VolumeSearch}[]>([]);
     const { containerRef, query, setTotalHits, pagination, setPaginate, totalHits, volume } = useAppContext()
     const { goTo } = useNavigateTo()
-    useHandleLimits({type: 'volume', windowHeight: containerRef?.current?.clientHeight, setPaginate,resourcesWidth:((containerRef?.current?.clientWidth)*0.67 -43)})
+    useHandleLimits({type: 'volume', windowHeight: containerRef?.current?.clientHeight, setPaginate,resourcesWidth:(containerRef?.current?.clientWidth - 30)})
     useEffect(() => {
        (async () =>  {
         let id

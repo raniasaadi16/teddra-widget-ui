@@ -4,8 +4,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { PathProps } from '../../../../../types';
-import { Breadcrumb } from '../../../breadcrumb';
-import { Search } from '../../../input/Search';
+
 import TypesDropdown from '../Filter/types';
 
 

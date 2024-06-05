@@ -46,8 +46,7 @@ export function searchPublications({q, volumeId, page, offset, type, limit}: {q:
     'text_match_type': 'max_score',
     'prioritize_token_position':true,
     "sort_by": 'created_at:desc',
-    'exclude_fields':'pinned_sources'
-
+    'exclude_fields':'pinned_sources',
   })
 
 }

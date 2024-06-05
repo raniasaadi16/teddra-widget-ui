@@ -8,7 +8,7 @@ type States = {
    server:Server | null,
    volume:Server | null,
    folder:{id:string, title:string} | null,
-
+    isCleared: boolean,
    sponsors:PartnerType[] | null,
 
    WindowHeight:number,
@@ -23,7 +23,8 @@ type States = {
    pagination : { offset: number, limit: number, currentPage: number },
 
    currentTab: 'main' | 'network' | 'grid',
-   selectedLocation:{name:string, path:string, network:{coll:string , id:string}} | null
+   selectedLocation:{name:string, path:string, network:{coll:string , id:string}} | null,
+   
 }
 type Functions = {
 
@@ -33,7 +34,7 @@ type Functions = {
   setVolume:(data:Server | null) => void,
   setFolder:(data:{id:string, title:string} | null) => void,
 
-
+  setIsCleared: (value:boolean) => void,
   setWindowHeight: (value:number) => void,
   setresourcesWidth: (value:number) => void
 
@@ -61,6 +62,7 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
     breadcrum:{routes: [{
         icon:{src:'Globe', type:'icon'},
     }]},
+    isCleared:false,
    datacenter:null,
    server:null,
    volume:null,
@@ -143,7 +145,8 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
         ...prev,
         query: '',
         selectedPubType: {value:'', icon:'', type: 'type'},
-        pagination:{ offset: 0, limit: prev.pagination.limit, currentPage: 1 }
+        pagination:{ offset: 0, limit: prev.pagination.limit, currentPage: 1 },
+        isCleared:true
       }))
     }
 
@@ -219,6 +222,15 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
         selectedLocation:data
       }))
     }
+
+   const setIsCleared=(value:boolean) => {
+    setState((prev) => ({
+      ...prev,
+      isCleared:value
+    }))
+   }
+
+
     return {
       ...state,
       setServer,
@@ -240,7 +252,7 @@ export const AppContextProvider = ({ children } : { children : JSX.Element}) => 
       rootRef,
       setsponsors, 
       setSelectedLocation,
-      setFolder
+      setFolder, setIsCleared
     }
   }, [state])
 

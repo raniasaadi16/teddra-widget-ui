@@ -15,9 +15,8 @@ export default function AllPublicationsLayout() {
     const { containerRef, query, selectedPubType, setTotalHits, pagination, setPaginate, totalHits } = useAppContext()
     const { goTo } = useNavigateTo()
     useHandleLimits({type: 'publication', windowHeight: containerRef?.current?.clientHeight, setPaginate, resourcesWidth:containerRef?.current?.clientWidth})
-
-    const search = async () => {
-        const res:any = await searchPublications({volumeId:params.volume ? params.volume : params.serverId!, q:query ,type:selectedPubType,  page:pagination.currentPage, limit:pagination.limit, offset:pagination.offset})
+    const search = async (q:string) => {
+        const res:any = await searchPublications({volumeId:params.volume ? params.volume : params.serverId!, q:q.length > 1 ? q : '' ,type:selectedPubType,  page:pagination.currentPage, limit:pagination.limit, offset:pagination.offset})
         setpublications(res.hits)
         setTotalHits(res.found)
     
@@ -25,8 +24,11 @@ export default function AllPublicationsLayout() {
     }
     useEffect(() => {
         (async () => {
-            await search()
+              
+                await search(query)
 
+               
+        
         })()
     }, [query, selectedPubType?.value, pagination.currentPage, pagination.limit, pagination.offset, params.volume, params.serverId]);
 

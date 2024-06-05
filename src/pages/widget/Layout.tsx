@@ -21,7 +21,7 @@ export default function WidgetLayout() {
     const [visible, setvisible] = useState(false);
     const navigate = useNavigate()
     const params = useParams()
-    const { setDatacenter,containerRef,setsponsors,  server, setServer, setVolume, datacenter, breadcrum,setWindowHeight, setdisable, disabled, query, setQuery, pagination, setPaginate, totalHits, setresourcesWidth, currentTab, volume, clearSearch, folder, setFolder } = useAppContext()
+    const { setDatacenter,containerRef,setsponsors,  server, setServer, setVolume, datacenter, breadcrum,setWindowHeight, setdisable, disabled, query, setQuery, pagination, setPaginate, totalHits, setresourcesWidth, currentTab, volume, clearSearch, folder, setFolder, setIsCleared } = useAppContext()
     const [loading, setloading] = useState(false);
     const location = useLocation()
     const [all, setall] = useState(false);
@@ -108,6 +108,7 @@ export default function WidgetLayout() {
           setdisable({publicationBar:false, query:false, filter:false})
 
         }else{
+          
           if(currentTab === 'network'){
             setdisable({publicationBar:true, query:true, filter:true})
 
@@ -127,8 +128,10 @@ export default function WidgetLayout() {
       }, [location.pathname, currentTab, params]);
 
       useEffect(() => {
-        
-        clearSearch()
+        setTimeout(() => {
+          clearSearch()
+          
+        }, 1000);
       }, [currentTab, all]);
 
     

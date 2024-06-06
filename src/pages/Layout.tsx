@@ -42,10 +42,6 @@ export default function Layout() {
 
             setifram(url)
             setvalue(url)
-        }else{
-            console.log('iframe none')
-            setifram('')
-            setvalue('')
         }
     }, [location.search]);
     return (

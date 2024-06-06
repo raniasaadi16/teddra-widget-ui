@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Outlet, useParams } from 'react-router';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
 import { Server } from '../../../../types';
 import Collapse, { Panel } from '../../../../components/shared/Collapse';
 import ReactSvg from '../../../../components/shared/ReactSvg';
@@ -15,7 +15,8 @@ export default function NetworkResourcesForServers() {
     const { containerRef, setTotalHits, datacenter } = useAppContext()
     const { goTo } = useNavigateTo()
     const [loading, setloading] = useState(false);
-
+    const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
        (async () =>  {
@@ -61,7 +62,7 @@ export default function NetworkResourcesForServers() {
                              key={volume.id}
   
                              active={volume.id === params.volumeId}
-                             onSelect={() => goTo(`/volumes/${volume.id}`, {state: {document: volume}})}
+                             onSelect={() => navigate(`${location.pathname}/volumes/${volume.id}`, {state: {document: volume}})}
                          />
                                 
 

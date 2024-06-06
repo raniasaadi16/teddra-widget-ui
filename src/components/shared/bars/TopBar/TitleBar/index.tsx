@@ -19,7 +19,12 @@ export default function TitleBar(props: TitleProps) {
           
                     <div className={`flex items-center h-full  space-x-3 `}>
                         <div className={`relative icon-md`}>
-                          <ReactSvg src={props.topbarTitle.icon.src} className='w-full h-full' /> 
+                          {props.topbarTitle.icon.type === 'icon' ? (
+                            <Icon name={props.topbarTitle.icon.src} className='w-full h-full'/>
+                          ) : (
+                            <ReactSvg src={props.topbarTitle.icon.src} className='w-full h-full' /> 
+
+                          )}
 
                         </div>      
                         <p className={` font-bold `}>{props.topbarTitle.title}</p>

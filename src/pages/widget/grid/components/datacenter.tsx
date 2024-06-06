@@ -2,21 +2,16 @@ import { message, Spin, Tooltip } from "antd"
 import { useRef, useState } from "react"
 import GenerateTemplate from './templates'
 
-import { useNavigate } from "react-router-dom"
 import CommingSoonTemplate from "./templates/CommingSoon"
 import ReactSvg from "../../../../components/shared/ReactSvg"
-import { ButtonSm } from "../../../../components/shared/Buttons/Small"
 import { ServerWithHomeDesq } from "../../../../types"
 
 
-export const Datacenter = ({dc, placeholder, active, handleNavigate, i, domain, select}: {dc:ServerWithHomeDesq, placeholder?:boolean,active?:boolean, handleNavigate?:() => void, i?:number, domain:string, select?:() => void}) => {
-    const ref = useRef<any>()
-    const navigate = useNavigate()
-    const [loading, setloading ] = useState(false)
-
+export const Datacenter = ({dc, placeholder, active, handleNavigate, i, domain, select}: {dc:ServerWithHomeDesq, placeholder?:boolean,active?:boolean, handleNavigate?:(id:string) => void, i?:number, domain:string, select?:() => void}) => {
+    
     return (
-        <div className={`${!placeholder && 'shadow-desq'} border border-main w-[250px] hover:-translate-y-1 h-max rounded-[10px] transition-transform transition-shadow  relative group  bg-white ${handleNavigate && 'cursor-pointer'}`}
-        
+        <div className={`${!placeholder && 'shadow-desq'} border border-main w-[250px] hover:-translate-y-1 h-max rounded-[10px] transition-transform transition-shadow  relative group  bg-white cursor-pointer`}
+        onClick={() => handleNavigate ? handleNavigate(dc.id) : {}}
       
         >
                 {placeholder && (
@@ -67,12 +62,10 @@ export const Datacenter = ({dc, placeholder, active, handleNavigate, i, domain, 
                         </div>
                     </div>
                     <div className="flex justify-end">
-                            {select ? (
-                                <button className="px-3 py-1.5 rounded border border-main" onClick={select}>Select</button>
-                            ) : 
-                                <button className="px-3 py-1.5 rounded border border-main bg-hover-transparent disabled:opacity-20" disabled={dc.status !== 'enabled'} onClick={select}>Reserve your engine</button>
+                         
+                                <button className="px-3 py-1.5 rounded border border-main bg-hover-transparent disabled:opacity-20" disabled={dc.status !== 'enabled'} onClick={select}>Select</button>
 
-                            }
+                            
                         
 
 

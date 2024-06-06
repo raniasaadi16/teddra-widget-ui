@@ -23,6 +23,7 @@ import Partner from './pages/widget/partner';
 import VolumeDetails from './components/shared/details/volume'; 
 import PublicationDetailsLayout from './components/shared/details/Publications/PublicationDetailsLayout';
 import FolderPublications from './pages/widget/resources/folderPublications';
+import { GridContextProvider } from './pages/widget/grid/context/gridContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -37,14 +38,20 @@ const router = createBrowserRouter(
 
 
           {/**    GRID RESOURCES (SECOND TAB) */}
-          <Route element={<GridContainerLayout/>}>
+          <Route element={<GridContextProvider><GridContainerLayout/></GridContextProvider>}>
             <Route element={<GridLayout/>}>
               <Route path='/widget/grid' element={<></>}/>
-                
+            </Route>
+            <Route element={<NetworkResourcesForServers/>}>
+              <Route path='/widget/grid/:datacenterId' element={<></>}/>
+              <Route element={<VolumeDetailsLayout/>}>
+                <Route path='/widget/grid/:datacenterId/volumes/:volumeId' element={<VolumeDetails/>}/>
+              </Route>
+
             </Route>
 
           </Route>
-        <Route element={<WidgetLayout/>}>
+        <Route element={<WidgetLayout/>}>                                 
           <Route path='/widget' element={<></>}/>
 
 

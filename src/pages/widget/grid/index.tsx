@@ -10,25 +10,25 @@ import { useGridContext } from './context/gridContext';
 
 
 export default function GridLayout() {
-    const [loading, setloading] = useState(false);
-    const [popular, setpopular] = useState<{document:ServerWithHomeDesq}[]>([]);
-    const navigate = useNavigate()
-    const { setSelectedNetwork } = useGridContext()
+    // const [loading, setloading] = useState(false);
+    // const [popular, setpopular] = useState<{document:ServerWithHomeDesq}[]>([]);
+    // const navigate = useNavigate()
+    // const { setSelectedNetwork } = useGridContext()
  
-    useEffect(() => {
-        getPopularCommunities().then((data:any) => setpopular(data.hits))
+    // useEffect(() => {
+    //     getPopularCommunities().then((data:any) => setpopular(data.hits))
 
-    }, [])
+    // }, [])
 
     
-    const handleNavigate = (id:string, title:string) => {
-        setSelectedNetwork(title)
-        navigate(`/widget/grid/${id}`)
-    }
+    // const handleNavigate = (id:string, title:string) => {
+    //     setSelectedNetwork(title)
+    //     navigate(`/widget/grid/${id}`)
+    // }
   return (
     <>
        
-            <Spin spinning={loading}>
+            {/* <Spin spinning={loading}>
 
                 <Collapse className='h-full flex flex-col space-y-2 pb-5' defaultActiveKey={['popular', 'pinned']}>
                     <>
@@ -51,7 +51,7 @@ export default function GridLayout() {
                     </>
                 </Collapse>
 
-            </Spin>
+            </Spin> */}
 
    
     

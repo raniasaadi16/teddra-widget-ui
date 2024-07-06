@@ -18,6 +18,7 @@ export default function Layout() {
     const location = useLocation()
     const [searchParams, setSearchParams] = useSearchParams()
 
+
     const handleSelectLocation = (loc: {name:string, path:string, network:{coll:string , id:string}}) => {
         setSelectedLocation(loc)
         setloading(true)
@@ -29,7 +30,7 @@ export default function Layout() {
                 setVolume(data.data)
             }
         }).finally(() => setloading(false))
-    }
+    } 
     const handleNetworkNavigation  = () => {
         navigate(`/widget/main${selectedLocation?.path}`)
     }
@@ -47,13 +48,13 @@ export default function Layout() {
     return (
         <div className='w-screen h-screen relative'>
             <iframe src={ifram} className='w-full h-full'></iframe>
-            <div className='absolute w-full bottom-0 left-0 flex justify-between items-end p-4'>
+            <div className='fixed z-[1000] w-full bottom-0 left-0 flex justify-between items-end p-4 pl-0 py-0'>
                 
                 {/* <button disabled={!selectedLocation} className='bg-skin-fill-inverted fill-skin-inverted text-skin-inverted rounded px-4 py-2 flex space-x-2.5 items-center disabled:opacity-20' onClick={() => navigate(`/widget/main${selectedLocation?.path}`)}>
                     <Icon className='icon-sm' name='TeddraLogo'/>
                     <p>Teddra -</p>
                 </button> */}
-                <Dock handleNetworkNavigation={handleNetworkNavigation} handleGridNavigation={handleGridNavigation} path={selectedLocation?.path} />
+                <Dock handleNetworkNavigation={handleNetworkNavigation} handleGridNavigation={handleGridNavigation} path={selectedLocation?.path} foldersId={selectedLocation?.path.split('/')[selectedLocation?.path.split('/').length -1]} />
                 <div className='flex rounded border border-main'>
                     <Locations handleSelectLocation={handleSelectLocation} selectedLocation={selectedLocation?.name}/>
 

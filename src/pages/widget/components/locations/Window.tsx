@@ -124,20 +124,23 @@ export default function LocationsWindow({visible, setvisible, handleSelectLocati
             </div>
             <div className="flex-1">
                 <Spin spinning={loading}>
-                    <div className='flex flex-wrap pl-[22px] gap-5 pt-5 pb-7 overflow-auto h-[calc(100vh - 40px)]'>
-                        {selectedThematic ? (
-                            <Servers handleSelect={handleSelectVolume} selectedThematic={selectedThematic.id}/>
-                        ) : (
-                            <>
-                                {thematics && thematics.map(dc => (
-                                    <Datacenter key={dc.document.id} dc={{...dc.document,iconUrl: `${storageUrl}${dc.document.iconUrl}`}} placeholder={false} active={false} domain={''} select={() => handleSelect(dc.document)}  />
+                    <div className='overflow-auto h-[calc(100vh-116px)]'>
+                        <div className='flex flex-wrap pl-[22px] gap-5 pt-5 pb-7 h-max'>
+                            {selectedThematic ? (
+                                <Servers handleSelect={handleSelectVolume} selectedThematic={selectedThematic.id}/>
+                            ) : (
+                                <>
+                                    {thematics && thematics.map(dc => (
+                                        <Datacenter key={dc.document.id} dc={{...dc.document,iconUrl: `${storageUrl}${dc.document.iconUrl}`}} placeholder={false} active={false} domain={''} select={() => handleSelect(dc.document)}  />
 
-                                ))}
+                                    ))}
 
-                            </>
+                                </>
 
-                        )}
-                    
+                            )}
+                        
+                        </div>
+
                     </div>
 
                 </Spin>

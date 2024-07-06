@@ -145,7 +145,7 @@ export default function WidgetLayout() {
         width={'40vw'}
         placement='left'
         style={{
-            height: '100vh',
+            height: 'calc(100vh - 47px)',
             top: '0',
             left:0,
         }}
@@ -230,7 +230,6 @@ export default function WidgetLayout() {
                       )}
                       
                     </div>
-                     <button className='px-4 py-1.5 bg-skin-fill-inverted text-skin-inverted rounded'>Download Teddra</button>
                    </div>
 
                 </div>

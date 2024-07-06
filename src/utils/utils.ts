@@ -1,6 +1,6 @@
 export const renderHeightStyle = (height:number) => {
-    return {height: height - 206}
+    return {height: height - 206 }
 }
 export const renderDtailsHeightStyle = (height:number) => {
-    return {height: height - 42}
+    return {height: height - 42 }
 }

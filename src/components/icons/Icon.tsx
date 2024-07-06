@@ -60,7 +60,11 @@ import {
     AddLocation,
     Legal,
     Unshortcut,
-    Warning
+    Warning,
+    Jobs,
+    Folders,
+    Newspapers,
+    Immo
 
 } from "./index";
 import { IconOptions } from "../../types";
@@ -126,9 +130,11 @@ const Components : ComponentOptions = {
   AddLocation,
   Legal,
   Unshortcut,
-  Warning
-
-
+  Warning,
+  Jobs,
+  Folders,
+  Newspapers,
+  Immo
 };
 
 export default function Icon({ name, className, style } : IconOptions) {

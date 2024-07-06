@@ -9,6 +9,7 @@ import { getVolumOwner, getVolumWithPartners } from "../../../../utils/requests"
 import PartnerWithWebsite from "../../cards/partners/PartnerWithWebsite";
 
 import OwnerWithWebsite from "../../cards/owner/OwnerWithWebsite";
+import DetailsLayout from "../layout";
 
 export default function VolumeDetails(){
     const [loading, setloading] = useState(false)
@@ -61,6 +62,8 @@ export default function VolumeDetails(){
     }, [volume]);
     
     return(
+
+        <DetailsLayout loading={false} >
             <Spin spinning={loading}>
                 {volume && <ObjectMode
                     fields={
@@ -106,6 +109,8 @@ export default function VolumeDetails(){
                 />}
             
             </Spin>
+
+        </DetailsLayout>
 
 
 

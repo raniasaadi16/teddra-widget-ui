@@ -37,7 +37,6 @@ export { default as Unshortcut } from "./files/Actions/Unshortcut";
 export { default as Webwalk } from "./files/Browser/Webwalk";
 export { default as PanelOpen } from "./files/Actions/OpenPanel";
 export { default as PanelClose } from "./files/Actions/ClosePanel";
-export { default as  Calendar} from "./files/Generic/Calendar";
 export { default as Modes } from "./files/Bar/Modes";
 export { default as LocalTree } from "./files/Generic/LocalTree";
 export { default as ChevronDownIcon } from "./files/Chevrons/ChevronDownIcon";
@@ -60,6 +59,15 @@ export { default as Legal } from "./files/Generic/Legal";
 export { default as Stats } from "./files/Generic/Stats";
 export { default as EmailSent } from "./files/Generic/EmailSent";
 export { default as Warning } from "./files/Generic/Warning";
+export { default as Calendar } from "./files/Bar/Calendar";
+export { default as Jobs } from "./files/Bar/Jobs";
+export { default as Immo } from "./files/Bar/Immo";
+export { default as Folders } from "./files/Bar/Folders";
+export { default as Newspapers } from "./files/Bar/Newspaper";
+
+
+
+
 
 
 

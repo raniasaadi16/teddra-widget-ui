@@ -15,6 +15,7 @@ export default function Publications({ publications, handlePublicationSelection,
 
   const renderDate = (date:number) => {
     const formatedDate = new Date(date * 1000).toLocaleDateString("en-US")
+    
     return `${formatedDate}`
   } 
     return (

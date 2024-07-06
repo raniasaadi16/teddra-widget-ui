@@ -46,8 +46,8 @@ export default function NetworkResourcesForVolumes() {
   return (
     <>
 
-        <div className="pt-[14px] overflow-auto flex-1" style={renderHeightStyle(containerRef?.current?.clientHeight)}>
-        <Collapse className='h-full flex flex-col space-y-2' defaultActiveKey={['0','1', '2', '3', '4']}>
+        <div className="pt-[14px] " style={renderHeightStyle(containerRef?.current?.clientHeight)}>
+        <Collapse className=' flex flex-col space-y-2' defaultActiveKey={['0','1', '2', '3', '4']}>
             <>
            
        

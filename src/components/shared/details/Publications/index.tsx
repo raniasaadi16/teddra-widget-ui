@@ -10,6 +10,7 @@ import { Publication } from '../../../../types'
 import { useLocation, useParams } from 'react-router'
 import { getPublication } from '../../../../utils/search'
 import { Spin } from 'antd'
+import DetailsLayout from '../layout'
 
 
 export default function PublicationDetails() {
@@ -40,7 +41,7 @@ export default function PublicationDetails() {
   return (
 
    
-        
+    <DetailsLayout loading={false} >
             <Spin spinning={loading}>
               {publication && (
                 <ObjectMode 
@@ -90,6 +91,8 @@ export default function PublicationDetails() {
               )}
 
             </Spin>
+
+    </DetailsLayout>
       
 
     
